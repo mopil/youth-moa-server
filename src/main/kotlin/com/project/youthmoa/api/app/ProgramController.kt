@@ -1,5 +1,6 @@
 package com.project.youthmoa.api.app
 
+import com.project.youthmoa.api.configuration.LoginRequired
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -18,16 +19,18 @@ class ProgramController {
     }
 
     @Operation(summary = "진행중인, 종료된 프로그램 수 조회")
-    @DeleteMapping("/count")
+    @GetMapping("/count")
     fun getProgramsCount() {
     }
 
     @Operation(summary = "프로그램 참가 신청")
+    @LoginRequired
     @PostMapping("/{programId}/applications")
     fun createApplication() {
     }
 
     @Operation(summary = "프로그램 신청 취소")
+    @LoginRequired
     @DeleteMapping("/{programId}/applications/{applicationId}")
     fun cancelApplication() {
     }

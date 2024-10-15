@@ -1,5 +1,6 @@
 package com.project.youthmoa.api.app
 
+import com.project.youthmoa.api.configuration.LoginRequired
 import com.project.youthmoa.api.dto.request.CreateUserRequest
 import com.project.youthmoa.api.dto.request.UserLoginRequest
 import com.project.youthmoa.api.dto.response.UserEmailDuplicationCheckResponse
@@ -30,7 +31,6 @@ class UserController(
     fun login(
         @RequestBody request: UserLoginRequest,
     ): UserLoginResponse {
-        println("hi")
         return userService.login(request)
     }
 
@@ -49,24 +49,30 @@ class UserController(
     @Operation(summary = "아이디 찾기")
     @PostMapping("/find-id")
     fun findId() {
+        // TODO
     }
 
     @Operation(summary = "비밀번호 찾기")
     @PostMapping("/find-password")
     fun findPassword() {
+        // TODO
     }
 
     @Operation(summary = "사용자 정보 수정")
+    @LoginRequired
     @PutMapping("/{userId}")
     fun updateUser(
         @PathVariable userId: Long,
     ) {
+        // TODO
     }
 
     @Operation(summary = "회원탈퇴")
+    @LoginRequired
     @DeleteMapping("/{userId}")
     fun deleteUser(
         @PathVariable userId: Long,
     ) {
+        // TODO
     }
 }
