@@ -33,6 +33,11 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
+
+    val jdslVersion = "3.5.2"
+    implementation("com.linecorp.kotlin-jdsl:jpql-dsl:$jdslVersion")
+    implementation("com.linecorp.kotlin-jdsl:jpql-render:$jdslVersion")
+    implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:$jdslVersion")
 }
 
 kotlin {

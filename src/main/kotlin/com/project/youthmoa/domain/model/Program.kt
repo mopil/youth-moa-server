@@ -17,6 +17,7 @@ class Program(
     // 진행장소는 freetext인가?
     var location: String? = null,
     var detailContent: String? = null,
+    var currentAppliedUserCount: Int = 0,
     var maxUserCount: Int,
     var applyStartDate: LocalDate,
     var applyEndDate: LocalDate,
@@ -35,7 +36,7 @@ class Program(
     val freeQuestions: List<ProgramFreeQuestion> = emptyList(),
     @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
     val choiceQuestions: List<ProgramChoiceQuestion> = emptyList(),
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id")
     var youthCenter: YouthCenter,
 ) : BaseEntity()
