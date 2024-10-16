@@ -38,6 +38,11 @@ dependencies {
     implementation("com.linecorp.kotlin-jdsl:jpql-dsl:$jdslVersion")
     implementation("com.linecorp.kotlin-jdsl:jpql-render:$jdslVersion")
     implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:$jdslVersion")
+
+    val jjwtVersion = "0.11.5"
+    implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
+    implementation("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
+    implementation("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
 }
 
 kotlin {

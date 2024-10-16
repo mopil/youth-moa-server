@@ -26,18 +26,16 @@ class GlobalControllerAdvice {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(
-                ErrorResponse(
-                    errorType = ErrorType.BAD_REQUEST,
-                    message = ex.message ?: ErrorType.BAD_REQUEST.defaultMessage,
-                ),
+                ErrorResponse.withMessageOrDefault(ErrorType.BAD_REQUEST, ex.message),
             )
     }
 
     @ExceptionHandler(UnauthorizedException::class)
-    fun handleUnauthorizedException(): ResponseEntity<ErrorResponse> {
+    fun handleUnauthorizedException(ex: UnauthorizedException): ResponseEntity<ErrorResponse> {
+        println(ex.message)
         return ResponseEntity
             .status(HttpStatus.UNAUTHORIZED)
-            .body(ErrorResponse.from(ErrorType.UNAUTHORIZED))
+            .body(ErrorResponse.withMessageOrDefault(ErrorType.UNAUTHORIZED, ex.message))
     }
 
     @ExceptionHandler(Exception::class)

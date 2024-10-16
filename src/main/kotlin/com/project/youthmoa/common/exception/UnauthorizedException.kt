@@ -1,3 +1,5 @@
 package com.project.youthmoa.common.exception
 
-class UnauthorizedException : RuntimeException()
+class UnauthorizedException(
+    message: String = ErrorType.UNAUTHORIZED.defaultMessage,
+) : RuntimeException(message)

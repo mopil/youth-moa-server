@@ -12,5 +12,13 @@ data class ErrorResponse(
                 errorType = errorType,
                 message = errorType.defaultMessage,
             )
+
+        fun withMessageOrDefault(
+            errorType: ErrorType,
+            message: String?,
+        ) = ErrorResponse(
+            errorType = errorType,
+            message = message ?: errorType.defaultMessage,
+        )
     }
 }
