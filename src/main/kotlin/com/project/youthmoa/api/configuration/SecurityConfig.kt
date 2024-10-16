@@ -38,5 +38,6 @@ val permittedUris =
         "/api/users/email-duplication",
         "/api/users/login",
         "/api/users/sign-up",
+        "/api/users/emails",
         "/api/programs",
     )

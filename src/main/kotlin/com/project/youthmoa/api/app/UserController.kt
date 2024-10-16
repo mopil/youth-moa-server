@@ -2,13 +2,15 @@ package com.project.youthmoa.api.app
 
 import com.project.youthmoa.api.configuration.LoginRequired
 import com.project.youthmoa.api.dto.request.CreateUserRequest
+import com.project.youthmoa.api.dto.request.FindEmailRequest
+import com.project.youthmoa.api.dto.request.UpdateUserInfoRequest
 import com.project.youthmoa.api.dto.request.UserLoginRequest
-import com.project.youthmoa.api.dto.response.UserEmailDuplicationCheckResponse
-import com.project.youthmoa.api.dto.response.UserLoginResponse
+import com.project.youthmoa.api.dto.response.*
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springdoc.core.annotations.ParameterObject
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "회원")
@@ -46,33 +48,30 @@ class UserController(
         }
     }
 
-    @Operation(summary = "아이디 찾기")
-    @PostMapping("/find-id")
-    fun findId() {
-        // TODO
-    }
-
-    @Operation(summary = "비밀번호 찾기")
-    @PostMapping("/find-password")
-    fun findPassword() {
-        // TODO
-    }
+    @Operation(summary = "이름, 휴대폰 번호로 아이디(이메일) 찾기")
+    @GetMapping("/emails")
+    fun findAllEmailByNameAndPhone(
+        @ParameterObject request: FindEmailRequest,
+    ) = userRepository.findAllByNameAndPhone(request.name, request.phone)
+        .map { FindEmailResponse.from(it) }
+        .let { FindEmailListResponse(it) }
 
     @Operation(summary = "사용자 정보 수정")
     @LoginRequired
     @PutMapping("/{userId}")
-    fun updateUser(
+    fun updateUserInfo(
         @PathVariable userId: Long,
-    ) {
-        // TODO
+        @RequestBody request: UpdateUserInfoRequest,
+    ): UserResponse {
+        return userService.updateUserInfo(userId, request)
     }
 
     @Operation(summary = "회원탈퇴")
     @LoginRequired
     @DeleteMapping("/{userId}")
-    fun deleteUser(
+    fun withdraw(
         @PathVariable userId: Long,
     ) {
-        // TODO
+        userService.withdraw(userId)
     }
 }
