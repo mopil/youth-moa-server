@@ -1,18 +1,21 @@
-package com.project.youthmoa.api.configuration
+package com.project.youthmoa.api.configuration.auth
 
+import com.project.youthmoa.api.configuration.auth.NoRequiredAuthentication.permittedUris
+import com.project.youthmoa.domain.service.TokenService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @EnableWebSecurity
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
-class SecurityConfig {
+class SecurityConfig(
+    private val tokenService: TokenService,
+) {
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
 
@@ -20,24 +23,18 @@ class SecurityConfig {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
+            .formLogin { it.disable() }
+            .httpBasic { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.requestMatchers("/admin/**").hasAnyRole("ADMIN")
                     .requestMatchers(*permittedUris).permitAll()
                     .anyRequest().authenticated()
             }
+            .addFilterBefore(
+                JwtAuthenticationFilter(tokenService),
+                UsernamePasswordAuthenticationFilter::class.java,
+            )
         return http.build()
     }
 }
-
-val permittedUris =
-    arrayOf(
-        "/swagger/**",
-        "/swagger-ui/**",
-        "/webjars/**",
-        "/api/users/email-duplication",
-        "/api/users/login",
-        "/api/users/sign-up",
-        "/api/users/emails",
-        "/api/programs",
-    )
