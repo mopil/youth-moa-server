@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.configuration.auth
+package com.project.youthmoa.common.auth
 
 object NoRequiredAuthentication {
     val permittedUris =

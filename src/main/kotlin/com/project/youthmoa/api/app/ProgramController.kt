@@ -1,6 +1,6 @@
 package com.project.youthmoa.api.app
 
-import com.project.youthmoa.api.configuration.LoginRequired
+import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.api.dto.request.GetAllProgramsRequest
 import com.project.youthmoa.api.dto.response.PageResponse
 import com.project.youthmoa.api.dto.response.ProgramSimpleResponse
@@ -36,13 +36,13 @@ class ProgramController(
     }
 
     @Operation(summary = "프로그램 참가 신청")
-    @LoginRequired
+    @AuthenticationRequired
     @PostMapping("/{programId}/applications")
     fun createApplication() {
     }
 
     @Operation(summary = "프로그램 신청 취소")
-    @LoginRequired
+    @AuthenticationRequired
     @DeleteMapping("/{programId}/applications/{applicationId}")
     fun cancelApplication() {
     }

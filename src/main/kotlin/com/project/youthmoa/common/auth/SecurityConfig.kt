@@ -1,6 +1,6 @@
-package com.project.youthmoa.api.configuration.auth
+package com.project.youthmoa.common.auth
 
-import com.project.youthmoa.api.configuration.auth.NoRequiredAuthentication.permittedUris
+import com.project.youthmoa.common.auth.NoRequiredAuthentication.permittedUris
 import com.project.youthmoa.domain.service.TokenService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

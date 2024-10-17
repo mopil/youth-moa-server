@@ -1,8 +1,8 @@
-package com.project.youthmoa.api.configuration.auth
+package com.project.youthmoa.common.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.project.youthmoa.api.configuration.auth.NoRequiredAuthentication.permittedUris
 import com.project.youthmoa.api.dto.response.ErrorResponse
+import com.project.youthmoa.common.auth.NoRequiredAuthentication.permittedUris
 import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.domain.service.TokenService
 import io.jsonwebtoken.ExpiredJwtException

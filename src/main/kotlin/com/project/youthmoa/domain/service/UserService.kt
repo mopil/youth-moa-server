@@ -5,6 +5,7 @@ import com.project.youthmoa.api.dto.request.UpdateUserInfoRequest
 import com.project.youthmoa.api.dto.request.UserLoginRequest
 import com.project.youthmoa.api.dto.response.UserLoginResponse
 import com.project.youthmoa.api.dto.response.UserResponse
+import com.project.youthmoa.common.auth.AuthenticationUtils.checkIsSelf
 import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.common.exception.UnauthorizedException
 import com.project.youthmoa.domain.repository.UserRepository
@@ -13,7 +14,6 @@ import com.project.youthmoa.domain.repository.findByIdOrThrow
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 interface UserService {
     fun signUp(request: CreateUserRequest): UserLoginResponse
@@ -68,7 +68,10 @@ interface UserService {
             userId: Long,
             request: UpdateUserInfoRequest,
         ): UserResponse {
+            checkIsSelf(userId)
+
             val user = userRepository.findByIdOrThrow(userId)
+
             user.apply {
                 name = request.newName
                 encPassword = passwordEncoder.encode(request.newPassword)
@@ -81,7 +84,10 @@ interface UserService {
 
         @Transactional
         override fun withdraw(userId: Long) {
+            checkIsSelf(userId)
+
             val user = userRepository.findByIdOrThrow(userId)
+
             user.isDeleted = true
             user.applications.forEach { application ->
                 application.apply {

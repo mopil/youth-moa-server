@@ -1,7 +1,7 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.configuration.auth.UserPrincipal
 import com.project.youthmoa.api.dto.response.TokenResponse
+import com.project.youthmoa.common.auth.UserPrincipal
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import io.jsonwebtoken.Jwts

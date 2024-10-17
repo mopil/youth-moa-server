@@ -50,7 +50,8 @@ class SwaggerConfig {
 }
 
 /**
- * Swagger에서 JWT 토큰 인증이 필요한 API를 표시하기 위함
+ * - Swagger에서 JWT 토큰 인증이 필요한 API를 표시한다 (자물쇠 모양)
+ * - API별로 인증이 필요한지 안한지 표시한다
  */
 @SecurityRequirement(name = SECURITY_SCHEME_NAME)
-annotation class LoginRequired
+annotation class AuthenticationRequired
