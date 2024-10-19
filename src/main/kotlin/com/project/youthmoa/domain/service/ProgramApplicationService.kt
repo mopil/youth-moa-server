@@ -76,8 +76,8 @@ class ProgramApplicationServiceImpl(
             ProgramApplication(
                 program = program,
                 applierName = request.applierName,
-                applierPhone = request.applierPhone.value,
-                applierEmail = request.applierEmail.value,
+                applierPhone = request.applierPhone,
+                applierEmail = request.applierEmail,
                 applierAddress = request.applierAddress,
                 attachmentFileIds = request.attachmentFileIds,
                 applier = loginUser,

@@ -6,10 +6,15 @@ import com.project.youthmoa.domain.vo.RawPassword
 import java.time.LocalDate
 
 data class UpdateUserInfoRequest(
-    val newPassword: RawPassword,
+    val newPassword: String,
     val newName: String,
-    val newPhone: Phone,
+    val newPhone: String,
     val newAddress: String,
     val newGender: Gender,
     val newBirthday: LocalDate,
-)
+) {
+    init {
+        RawPassword(newPassword)
+        Phone(newPhone)
+    }
+}

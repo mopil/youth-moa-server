@@ -4,7 +4,7 @@ import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.api.controller.common.spec.FileApiSpec
 import com.project.youthmoa.api.dto.response.FileMetaResponse
 import com.project.youthmoa.common.auth.AuthenticationUtils
-import com.project.youthmoa.common.util.FileService
+import com.project.youthmoa.common.util.FileManager
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType
@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 @RequestMapping("/common/files")
 class FileController(
-    private val fileService: FileService,
+    private val fileManager: FileManager,
 ) : FileApiSpec {
     @AuthenticationRequired
     @PostMapping(
@@ -33,14 +33,14 @@ class FileController(
         @RequestPart file: MultipartFile,
     ): FileMetaResponse {
         val loginUser = AuthenticationUtils.getCurrentLoginUser()
-        return fileService.uploadFile(loginUser.id, file)
+        return fileManager.uploadFile(loginUser.id, file)
     }
 
     @GetMapping("/{fileId}/download")
     override fun downloadFile(
         @PathVariable fileId: Long,
     ): ResponseEntity<InputStreamResource> {
-        val resource = fileService.downloadFile(fileId)
+        val resource = fileManager.downloadFile(fileId)
 
         return ResponseEntity.ok()
             .contentType(resource.contentType)

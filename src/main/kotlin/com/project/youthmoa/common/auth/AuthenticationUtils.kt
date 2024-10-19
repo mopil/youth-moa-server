@@ -11,6 +11,7 @@ object AuthenticationUtils {
             "/swagger/**",
             "/swagger-ui/**",
             "/webjars/**",
+            "/v3/api-docs/**",
             "/api/users/email-duplication",
             "/api/users/login",
             "/api/users/sign-up",

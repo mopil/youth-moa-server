@@ -7,5 +7,9 @@ data class FindEmailRequest(
     @field:Parameter(description = "유저 이름", required = true)
     val name: String,
     @field:Parameter(description = "휴대폰 번호 (오직 숫자만)", required = true)
-    val phone: Phone,
-)
+    val phone: String,
+) {
+    init {
+        Phone(phone)
+    }
+}

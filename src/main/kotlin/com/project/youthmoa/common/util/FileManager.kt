@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 
-interface FileService {
+interface FileManager {
     fun uploadFile(
         userId: Long,
         multipartFile: MultipartFile,
@@ -26,11 +26,11 @@ interface FileService {
 }
 
 @Component
-class FileServiceS3Impl(
+class FileManagerS3Impl(
     @Value("\${cloud.aws.s3.bucket}") private val bucket: String,
     private val awsS3Client: AmazonS3Client,
     private val fileMetaRepository: FileMetaRepository,
-) : FileService {
+) : FileManager {
     @Transactional
     override fun uploadFile(
         userId: Long,

@@ -10,9 +10,9 @@ import java.time.LocalDate
 
 data class CreateUserRequest(
     @Schema(description = "ID(email)", example = "mopil1102@gmail.com")
-    val email: Email,
+    val email: String,
     @Schema(description = "비밀번호(암호화 없이 raw 입력값 그대로)")
-    val password: RawPassword,
+    val password: String,
     val name: String,
     @Schema(description = "휴대폰 번호(숫자만)", example = "01012341234")
     val phone: Phone,
@@ -21,9 +21,18 @@ data class CreateUserRequest(
     @Schema(description = "생년월일(yyyy-MM-dd)", example = "1998-11-02")
     val birthday: LocalDate,
 ) {
+    /**
+     * value class의 inline 특성 때문에 springdoc의 Schema가 작동하지 않음
+     * 따라서 init 블록에서 검증 로직을 추가하여 요청 객체 생성 시 검증 로직을 수행하도록 함
+     */
+    init {
+        Email(email)
+        RawPassword(password)
+    }
+
     fun toEntity(encPassword: String) =
         User(
-            email = email.value,
+            email = email,
             encPassword = encPassword,
             name = name,
             phone = phone.value,
