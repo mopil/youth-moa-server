@@ -2,9 +2,9 @@ package com.project.youthmoa.common.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.project.youthmoa.api.dto.response.ErrorResponse
-import com.project.youthmoa.common.auth.NoRequiredAuthentication.permittedUris
+import com.project.youthmoa.common.auth.AuthenticationUtils.permittedUris
 import com.project.youthmoa.common.exception.ErrorType
-import com.project.youthmoa.domain.service.TokenService
+import com.project.youthmoa.common.util.TokenManager
 import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -16,7 +16,7 @@ import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 
 class JwtAuthenticationFilter(
-    private val tokenService: TokenService,
+    private val tokenManager: TokenManager,
 ) : OncePerRequestFilter() {
     private val pathMatcher = AntPathMatcher()
 
@@ -38,7 +38,7 @@ class JwtAuthenticationFilter(
 
         try {
             val token = request.getHeader("Authorization").split(" ").last()
-            val authentication = tokenService.resolveToken(token)
+            val authentication = tokenManager.resolveToken(token)
             SecurityContextHolder.getContext().authentication = authentication
 
             filterChain.doFilter(request, response)

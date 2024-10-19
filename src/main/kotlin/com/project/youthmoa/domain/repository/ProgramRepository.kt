@@ -1,11 +1,11 @@
 package com.project.youthmoa.domain.repository
 
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
-import com.project.youthmoa.api.dto.spec.GetAllProgramsSortType
-import com.project.youthmoa.api.dto.spec.GetAllProgramsSpec
 import com.project.youthmoa.domain.model.Program
-import com.project.youthmoa.domain.model.ProgramStatus
 import com.project.youthmoa.domain.model.YouthCenter
+import com.project.youthmoa.domain.repository.spec.GetAllProgramsSortType
+import com.project.youthmoa.domain.repository.spec.GetAllProgramsSpec
+import com.project.youthmoa.domain.type.ProgramStatus
 import org.springframework.data.domain.Page
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -18,7 +18,7 @@ fun ProgramRepository.findByIdOrThrow(id: Long): Program {
 }
 
 interface ProgramJdslRepository {
-    fun findAllBySpec(params: GetAllProgramsSpec): Page<Program?>
+    fun findAllBySpec(spec: GetAllProgramsSpec): Page<Program?>
 }
 
 @Repository

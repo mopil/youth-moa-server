@@ -1,6 +1,6 @@
 package com.project.youthmoa.api.dto.request
 
-import com.project.youthmoa.api.dto.spec.GetAllProgramsSortType
+import com.project.youthmoa.domain.repository.spec.GetAllProgramsSortType
 import io.swagger.v3.oas.annotations.Parameter
 
 data class GetAllProgramsRequest(

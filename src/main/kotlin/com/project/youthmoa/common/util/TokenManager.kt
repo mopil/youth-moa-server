@@ -1,9 +1,8 @@
-package com.project.youthmoa.domain.service
+package com.project.youthmoa.common.util
 
 import com.project.youthmoa.api.dto.response.TokenResponse
 import com.project.youthmoa.common.auth.UserPrincipal
 import com.project.youthmoa.common.util.Logger.logger
-import com.project.youthmoa.common.util.SUPER_ADMIN_USER_ID
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import io.jsonwebtoken.Jwts
@@ -17,8 +16,8 @@ import java.security.Key
 import java.time.ZonedDateTime
 import java.util.*
 
-interface TokenService {
-    fun generateAccessToken(
+interface TokenManager {
+    fun generateToken(
         userId: Long,
         userRole: String,
     ): TokenResponse
@@ -30,10 +29,10 @@ interface TokenService {
         @Value("\${jwt.secret-key}") private val secretKey: String,
         @Value("\${jwt.ttl-seconds}") private val tokenValidSeconds: Long,
         private val userRepository: UserRepository,
-    ) : TokenService {
+    ) : TokenManager {
         val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray())
 
-        override fun generateAccessToken(
+        override fun generateToken(
             userId: Long,
             userRole: String,
         ): TokenResponse {

@@ -1,14 +1,9 @@
 package com.project.youthmoa.domain.model
 
+import com.project.youthmoa.domain.model.converter.CommaToLongListConverter
+import com.project.youthmoa.domain.type.ProgramApplicationStatus
 import jakarta.persistence.*
 import java.time.LocalDateTime
-
-enum class ApplicationStatus {
-    대기,
-    반려,
-    취소,
-    승인,
-}
 
 @Entity
 class ProgramApplication(
@@ -18,7 +13,7 @@ class ProgramApplication(
     val applierPhone: String,
     val applierAddress: String,
     @Enumerated(EnumType.STRING)
-    var status: ApplicationStatus = ApplicationStatus.대기,
+    var status: ProgramApplicationStatus = ProgramApplicationStatus.대기,
     // 담당자(관리자)가 승인, 반려시 들어가는 정보
     val adminActionDateTime: LocalDateTime? = null,
     var adminComment: String? = null,
@@ -31,6 +26,7 @@ class ProgramApplication(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     var applier: User,
-    @Column(name = "attachment_urls")
-    var attachmentUrlsCommaString: String,
+    @Column(name = "attachment_file_ids")
+    @Convert(converter = CommaToLongListConverter::class)
+    var attachmentFileIds: List<Long>,
 ) : BaseEntity()

@@ -5,12 +5,12 @@ import com.project.youthmoa.api.dto.request.CreateProgramApplicationRequest
 import com.project.youthmoa.api.dto.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.common.auth.AuthenticationUtils
 import com.project.youthmoa.common.exception.ForbiddenException
-import com.project.youthmoa.domain.model.ApplicationStatus
 import com.project.youthmoa.domain.model.ProgramApplication
-import com.project.youthmoa.domain.model.ProgramStatus
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
+import com.project.youthmoa.domain.type.ProgramApplicationStatus
+import com.project.youthmoa.domain.type.ProgramStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -38,12 +38,12 @@ class ProgramApplicationServiceImpl(
         val inProgressProgramCount =
             applicationHistories.count {
                 it.program.status == ProgramStatus.진행중 &&
-                    it.status in listOf(ApplicationStatus.승인, ApplicationStatus.대기)
+                    it.status in listOf(ProgramApplicationStatus.승인, ProgramApplicationStatus.대기)
             }
         val endProgramCount =
             applicationHistories.count {
                 it.program.status == ProgramStatus.종료 &&
-                    it.status == ApplicationStatus.승인
+                    it.status == ProgramApplicationStatus.승인
             }
 
         return GetUserApplicationHistoriesResponse.of(
@@ -60,11 +60,11 @@ class ProgramApplicationServiceImpl(
 
         programApplicationRepository.findByProgramIdAndApplierId(request.programId, loginUser.id)?.let {
             when (it.status) {
-                ApplicationStatus.승인 -> {
+                ProgramApplicationStatus.승인 -> {
                     throw IllegalStateException("이미 승인 완료 되었습니다.")
                 }
 
-                ApplicationStatus.대기 -> {
+                ProgramApplicationStatus.대기 -> {
                     throw IllegalStateException("이미 신청하여 승인 대기중입니다.")
                 }
 
@@ -76,10 +76,10 @@ class ProgramApplicationServiceImpl(
             ProgramApplication(
                 program = program,
                 applierName = request.applierName,
-                applierPhone = request.applierPhone,
-                applierEmail = request.applierEmail,
+                applierPhone = request.applierPhone.value,
+                applierEmail = request.applierEmail.value,
                 applierAddress = request.applierAddress,
-                attachmentUrlsCommaString = request.attachmentUrls.joinToString(","),
+                attachmentFileIds = request.attachmentFileIds,
                 applier = loginUser,
             ).let(programApplicationRepository::save)
 
@@ -94,11 +94,11 @@ class ProgramApplicationServiceImpl(
         val loginUser = AuthenticationUtils.getCurrentLoginUser()
         val application = programApplicationRepository.findByIdOrThrow(applicationId)
 
-        if (application.status == ApplicationStatus.승인) {
+        if (application.status == ProgramApplicationStatus.승인) {
             throw IllegalStateException("승인된 건은 취소할 수 없습니다.")
         }
 
-        if (application.status == ApplicationStatus.반려) {
+        if (application.status == ProgramApplicationStatus.반려) {
             throw IllegalStateException("반려된 건은 취소할 수 없습니다.")
         }
 
@@ -107,7 +107,7 @@ class ProgramApplicationServiceImpl(
         }
 
         application.apply {
-            status = ApplicationStatus.취소
+            status = ProgramApplicationStatus.취소
             cancelReason = request.cancelReason
         }
     }

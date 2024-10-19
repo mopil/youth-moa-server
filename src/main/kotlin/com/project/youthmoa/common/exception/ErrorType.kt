@@ -13,4 +13,6 @@ enum class ErrorType(
     FORBIDDEN(403, "해당 요청을 수행할 권한이 없어요"),
     INTERNAL_SERVER_ERROR(500, "알 수 없는 오류가 발생했어요"),
     TOO_LARGE_FILE(413, "파일 크기가 너무 크네요"),
+    FILE_ACTION_FAILED(400, "파일 업/다운로드에 실패했어요"),
+    SEND_EMAIL_FAIL(400, "이메일 전송에 실패했어요"),
 }

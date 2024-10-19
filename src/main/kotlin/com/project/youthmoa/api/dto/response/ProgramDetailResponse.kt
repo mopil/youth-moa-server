@@ -1,7 +1,7 @@
 package com.project.youthmoa.api.dto.response
 
 import com.project.youthmoa.domain.model.Program
-import com.project.youthmoa.domain.model.ProgramStatus
+import com.project.youthmoa.domain.type.ProgramStatus
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -44,7 +44,7 @@ data class ProgramDetailResponse(
                 maxUserCount = program.maxUserCount,
                 contactNumber = program.contactNumber,
                 attachmentUrl = program.attachmentUrl,
-                lectures = program.lecturesCommaString.split(","),
+                lectures = program.lectures,
                 freeQuestions = program.freeQuestions.map { it.question },
                 createdAt = program.createdAt,
                 updatedAt = program.updatedAt,

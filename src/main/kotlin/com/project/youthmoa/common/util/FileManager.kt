@@ -1,16 +1,17 @@
-package com.project.youthmoa.domain.service
+package com.project.youthmoa.common.util
 
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.project.youthmoa.api.dto.response.DownloadFileResource
 import com.project.youthmoa.api.dto.response.FileMetaResponse
+import com.project.youthmoa.common.exception.InternalServerException
 import com.project.youthmoa.domain.model.FileMeta
 import com.project.youthmoa.domain.repository.FileMetaRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
@@ -24,7 +25,7 @@ interface FileService {
     fun downloadFile(fileId: Long): DownloadFileResource
 }
 
-@Service
+@Component
 class FileServiceS3Impl(
     @Value("\${cloud.aws.s3.bucket}") private val bucket: String,
     private val awsS3Client: AmazonS3Client,
@@ -37,11 +38,16 @@ class FileServiceS3Impl(
     ): FileMetaResponse {
         val originalFileName = multipartFile.originalFilename ?: throw IllegalArgumentException("파일 이름이 없습니다.")
         val serverFileName = "${userId}_${LocalDateTime.now()}_$originalFileName"
-        ObjectMetadata().apply {
-            contentType = multipartFile.contentType
-            contentLength = multipartFile.size
-        }.let {
-            awsS3Client.putObject(bucket, serverFileName, multipartFile.inputStream, it)
+
+        try {
+            ObjectMetadata().apply {
+                contentType = multipartFile.contentType
+                contentLength = multipartFile.size
+            }.let {
+                awsS3Client.putObject(bucket, serverFileName, multipartFile.inputStream, it)
+            }
+        } catch (e: Exception) {
+            throw InternalServerException.ofFileActionFailed()
         }
 
         val fileMeta =
@@ -57,7 +63,12 @@ class FileServiceS3Impl(
 
     override fun downloadFile(fileId: Long): DownloadFileResource {
         val fileMeta = fileMetaRepository.findByIdOrThrow(fileId)
-        val s3Object = awsS3Client.getObject(bucket, fileMeta.serverFileName)
+        val s3Object =
+            try {
+                awsS3Client.getObject(bucket, fileMeta.serverFileName)
+            } catch (e: Exception) {
+                throw InternalServerException.ofFileActionFailed()
+            }
         return DownloadFileResource(
             contentType =
                 s3Object.objectMetadata.contentType.let {

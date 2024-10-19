@@ -1,7 +1,7 @@
 package com.project.youthmoa.api.dto.response
 
 import com.project.youthmoa.domain.model.Program
-import com.project.youthmoa.domain.model.ProgramStatus
+import com.project.youthmoa.domain.type.ProgramStatus
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 

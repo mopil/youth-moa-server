@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.dto.spec
+package com.project.youthmoa.domain.repository.spec
 
 import com.project.youthmoa.api.dto.request.GetAllProgramsRequest
 import org.springframework.data.domain.PageRequest

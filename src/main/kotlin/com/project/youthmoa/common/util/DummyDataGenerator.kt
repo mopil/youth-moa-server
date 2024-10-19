@@ -4,6 +4,8 @@ import com.project.youthmoa.domain.model.*
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository
+import com.project.youthmoa.domain.type.Gender
+import com.project.youthmoa.domain.type.UserRole
 import jakarta.annotation.PostConstruct
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -63,7 +65,7 @@ class DummyDataGenerator(
                 applyEndDate = LocalDate.now().plusDays(Random.nextLong(0, 7)),
                 programStartDate = LocalDate.now().minusDays(Random.nextLong(0, 14)),
                 programEndDate = LocalDate.now().plusDays(Random.nextLong(0, 7)),
-                lecturesCommaString = "강좌1,강좌2",
+                lectures = listOf("강좌1", "강좌2"),
                 youthCenter = youthCenters.random(),
             ).also {
                 programRepository.save(it)

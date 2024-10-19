@@ -1,7 +1,7 @@
 package com.project.youthmoa.api.dto.response
 
-import com.project.youthmoa.domain.model.Gender
 import com.project.youthmoa.domain.model.User
+import com.project.youthmoa.domain.type.Gender
 import java.time.LocalDate
 
 data class UserResponse(

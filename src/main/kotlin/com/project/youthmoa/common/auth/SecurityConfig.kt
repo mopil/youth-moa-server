@@ -1,7 +1,7 @@
 package com.project.youthmoa.common.auth
 
-import com.project.youthmoa.common.auth.NoRequiredAuthentication.permittedUris
-import com.project.youthmoa.domain.service.TokenService
+import com.project.youthmoa.common.auth.AuthenticationUtils.permittedUris
+import com.project.youthmoa.common.util.TokenManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 class SecurityConfig(
-    private val tokenService: TokenService,
+    private val tokenManager: TokenManager,
 ) {
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
@@ -31,7 +31,7 @@ class SecurityConfig(
                     .anyRequest().authenticated()
             }
             .addFilterBefore(
-                JwtAuthenticationFilter(tokenService),
+                JwtAuthenticationFilter(tokenManager),
                 UsernamePasswordAuthenticationFilter::class.java,
             )
         return http.build()

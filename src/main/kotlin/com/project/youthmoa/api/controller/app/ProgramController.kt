@@ -5,9 +5,9 @@ import com.project.youthmoa.api.dto.request.GetAllProgramsRequest
 import com.project.youthmoa.api.dto.response.PageResponse
 import com.project.youthmoa.api.dto.response.ProgramDetailResponse
 import com.project.youthmoa.api.dto.response.ProgramSimpleResponse
-import com.project.youthmoa.api.dto.spec.GetAllProgramsSpec
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
+import com.project.youthmoa.domain.repository.spec.GetAllProgramsSpec
 import org.springframework.web.bind.annotation.*
 
 @RestController

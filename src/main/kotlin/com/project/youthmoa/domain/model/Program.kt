@@ -1,13 +1,9 @@
 package com.project.youthmoa.domain.model
 
+import com.project.youthmoa.domain.model.converter.CommaToStringListConverter
+import com.project.youthmoa.domain.type.ProgramStatus
 import jakarta.persistence.*
 import java.time.LocalDate
-
-enum class ProgramStatus {
-    진행중,
-    마감,
-    종료,
-}
 
 @Entity
 class Program(
@@ -30,7 +26,8 @@ class Program(
     // 프로그램 신청 시 관리자 수락이 필요한지 여부
     var isNeedApprove: Boolean = true,
     @Column(name = "lectures")
-    var lecturesCommaString: String,
+    @Convert(converter = CommaToStringListConverter::class)
+    var lectures: List<String>,
     @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
     val freeQuestions: List<ProgramFreeQuestion> = emptyList(),
     @ManyToOne(fetch = FetchType.LAZY)

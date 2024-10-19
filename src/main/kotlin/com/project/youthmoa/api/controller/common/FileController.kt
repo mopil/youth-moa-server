@@ -4,7 +4,7 @@ import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.api.controller.common.spec.FileApiSpec
 import com.project.youthmoa.api.dto.response.FileMetaResponse
 import com.project.youthmoa.common.auth.AuthenticationUtils
-import com.project.youthmoa.domain.service.FileService
+import com.project.youthmoa.common.util.FileService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType

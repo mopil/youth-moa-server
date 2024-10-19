@@ -5,27 +5,29 @@ import com.project.youthmoa.api.controller.app.spec.UserApiSpec
 import com.project.youthmoa.api.dto.request.*
 import com.project.youthmoa.api.dto.response.*
 import com.project.youthmoa.domain.repository.UserRepository
-import com.project.youthmoa.domain.service.UserService
+import com.project.youthmoa.domain.service.UserInfoService
+import com.project.youthmoa.domain.service.UserLoginService
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/users")
 class UserController(
-    private val userService: UserService,
+    private val userLoginService: UserLoginService,
+    private val userInfoService: UserInfoService,
     private val userRepository: UserRepository,
 ) : UserApiSpec {
     @PostMapping("/sign-up")
     override fun signUp(
         @RequestBody request: CreateUserRequest,
     ): UserLoginResponse {
-        return userService.signUp(request)
+        return userLoginService.signUp(request)
     }
 
     @PostMapping("/login")
     override fun login(
         @RequestBody request: UserLoginRequest,
     ): UserLoginResponse {
-        return userService.login(request)
+        return userLoginService.login(request)
     }
 
     @GetMapping("/email-duplication")
@@ -41,7 +43,7 @@ class UserController(
 
     @GetMapping("/emails")
     override fun findAllEmailByNameAndPhone(request: FindEmailRequest) =
-        userRepository.findAllByNameAndPhone(request.name, request.phone)
+        userRepository.findAllByNameAndPhone(request.name, request.phone.value)
             .map { FindEmailResponse.from(it) }
             .let { FindEmailListResponse(it) }
 
@@ -49,7 +51,7 @@ class UserController(
     fun resetPassword(
         @RequestBody request: ResetPasswordRequest,
     ) {
-        userService.resetPassword(request.email)
+        userInfoService.resetPassword(request.email.value)
     }
 
     @AuthenticationRequired
@@ -58,7 +60,7 @@ class UserController(
         @PathVariable userId: Long,
         @RequestBody request: UpdateUserInfoRequest,
     ): UserResponse {
-        return userService.updateUserInfo(userId, request)
+        return userInfoService.updateUserInfo(userId, request)
     }
 
     @AuthenticationRequired
@@ -66,6 +68,6 @@ class UserController(
     override fun withdraw(
         @PathVariable userId: Long,
     ) {
-        userService.withdraw(userId)
+        userInfoService.withdraw(userId)
     }
 }

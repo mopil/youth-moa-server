@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.multipart.MaxUploadSizeExceededException
@@ -27,12 +28,22 @@ class GlobalControllerAdvice(
     @ExceptionHandler(
         IllegalStateException::class,
         IllegalArgumentException::class,
+        HttpMessageNotReadableException::class,
     )
     fun handleBadRequestException(ex: Exception): ResponseEntity<ErrorResponse> {
+        val message =
+            when (ex) {
+                is HttpMessageNotReadableException -> {
+                    ex.cause?.cause?.message
+                }
+                else -> {
+                    ex.message
+                }
+            }
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(
-                ErrorResponse.withMessageOrDefault(ErrorType.BAD_REQUEST, ex.message),
+                ErrorResponse.withMessageOrDefault(ErrorType.BAD_REQUEST, message),
             )
     }
 
@@ -70,7 +81,7 @@ class GlobalControllerAdvice(
     )
     @ExceptionHandler(Exception::class)
     fun handleUnexpectedException(ex: Exception): ResponseEntity<ErrorResponse> {
-        logger.error("예상치 못한 에러 발생 = ${ex.message}")
+        logger.error("예상치 못한 에러 발생", ex)
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(

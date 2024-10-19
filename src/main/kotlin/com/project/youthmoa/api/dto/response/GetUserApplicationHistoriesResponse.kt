@@ -1,7 +1,7 @@
 package com.project.youthmoa.api.dto.response
 
-import com.project.youthmoa.domain.model.ApplicationStatus
 import com.project.youthmoa.domain.model.ProgramApplication
+import com.project.youthmoa.domain.type.ProgramApplicationStatus
 import java.time.LocalDateTime
 
 data class GetUserApplicationHistoriesResponse(
@@ -31,7 +31,7 @@ data class GetUserApplicationHistory(
     val applierPhone: String,
     val applierEmail: String,
     val applierAddress: String,
-    val applicationStatus: ApplicationStatus,
+    val applicationStatus: ProgramApplicationStatus,
     val applicationDate: String,
     val applicationId: Long,
     val applicationCreatedAt: LocalDateTime,
@@ -41,17 +41,18 @@ data class GetUserApplicationHistory(
     val approvedDateTime: LocalDateTime?,
     val rejectedDateTime: LocalDateTime?,
     val adminComment: String?,
+    val attachmentFileIds: List<Long> = emptyList(),
 ) {
     companion object {
         fun from(programApplication: ProgramApplication): GetUserApplicationHistory {
             val approvedDateTime =
-                if (programApplication.status == ApplicationStatus.승인) {
+                if (programApplication.status == ProgramApplicationStatus.승인) {
                     programApplication.adminActionDateTime
                 } else {
                     null
                 }
             val rejectedDateTime =
-                if (programApplication.status == ApplicationStatus.반려) {
+                if (programApplication.status == ProgramApplicationStatus.반려) {
                     programApplication.adminActionDateTime
                 } else {
                     null
@@ -74,6 +75,7 @@ data class GetUserApplicationHistory(
                 approvedDateTime = approvedDateTime,
                 rejectedDateTime = rejectedDateTime,
                 adminComment = programApplication.adminComment,
+                attachmentFileIds = programApplication.attachmentFileIds,
             )
         }
     }
