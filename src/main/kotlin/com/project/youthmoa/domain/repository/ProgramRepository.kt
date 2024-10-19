@@ -8,9 +8,14 @@ import com.project.youthmoa.domain.model.ProgramStatus
 import com.project.youthmoa.domain.model.YouthCenter
 import org.springframework.data.domain.Page
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 interface ProgramRepository : JpaRepository<Program, Long>, ProgramJdslRepository
+
+fun ProgramRepository.findByIdOrThrow(id: Long): Program {
+    return findByIdOrNull(id) ?: throw NoSuchElementException()
+}
 
 interface ProgramJdslRepository {
     fun findAllBySpec(params: GetAllProgramsSpec): Page<Program?>

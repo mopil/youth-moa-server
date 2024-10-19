@@ -20,6 +20,6 @@ class User(
     var birthday: LocalDate,
     @Enumerated(EnumType.STRING)
     var gender: Gender,
-    @OneToMany(mappedBy = "requestUser", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "applier", cascade = [CascadeType.ALL], orphanRemoval = true)
     val applications: List<ProgramApplication> = emptyList(),
 ) : BaseEntity()

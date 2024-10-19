@@ -6,6 +6,7 @@ import java.time.LocalDate
 enum class ProgramStatus {
     진행중,
     마감,
+    종료,
 }
 
 @Entity
@@ -34,8 +35,6 @@ class Program(
     var lecturesCommaString: String,
     @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
     val freeQuestions: List<ProgramFreeQuestion> = emptyList(),
-    @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val choiceQuestions: List<ProgramChoiceQuestion> = emptyList(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id")
     var youthCenter: YouthCenter,
@@ -46,16 +45,6 @@ class ProgramFreeQuestion(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
     val question: String,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "program_id")
-    val program: Program,
-)
-
-@Entity
-class ProgramChoiceQuestion(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
-    // TODO: 선택지를 어떻게 할지?
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "program_id")
     val program: Program,

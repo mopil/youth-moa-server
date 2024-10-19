@@ -11,5 +11,6 @@ object NoRequiredAuthentication {
             "/api/users/sign-up",
             "/api/users/emails",
             "/api/programs",
+            "/api/programs/{programId}",
         )
 }

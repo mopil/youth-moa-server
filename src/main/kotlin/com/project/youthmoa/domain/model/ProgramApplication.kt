@@ -1,7 +1,6 @@
 package com.project.youthmoa.domain.model
 
 import jakarta.persistence.*
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 enum class ApplicationStatus {
@@ -16,10 +15,9 @@ class ProgramApplication(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
     // 프로그램 신청 시 신청자 정보를 변경해서 제출 할 수 있어서 별도로 관리
+    val applierEmail: String,
     val applierName: String,
     val applierPhone: String,
-    val applierGender: Gender,
-    val applierBirthday: LocalDate,
     val applierAddress: String,
     @Enumerated(EnumType.STRING)
     var status: ApplicationStatus = ApplicationStatus.대기,
@@ -34,5 +32,7 @@ class ProgramApplication(
     var program: Program,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    var requestUser: User,
+    var applier: User,
+    @Column(name = "attachment_urls")
+    var attachmentUrlsCommaString: String,
 ) : BaseEntity()
