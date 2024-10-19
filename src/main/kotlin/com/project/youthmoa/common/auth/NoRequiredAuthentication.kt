@@ -9,6 +9,7 @@ object NoRequiredAuthentication {
             "/api/users/email-duplication",
             "/api/users/login",
             "/api/users/sign-up",
+            "/api/users/reset-password",
             "/api/users/emails",
             "/api/programs",
             "/api/programs/{programId}",

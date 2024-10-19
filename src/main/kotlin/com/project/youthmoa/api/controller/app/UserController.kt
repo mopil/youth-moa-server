@@ -2,10 +2,7 @@ package com.project.youthmoa.api.controller.app
 
 import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.api.controller.app.spec.UserApiSpec
-import com.project.youthmoa.api.dto.request.CreateUserRequest
-import com.project.youthmoa.api.dto.request.FindEmailRequest
-import com.project.youthmoa.api.dto.request.UpdateUserInfoRequest
-import com.project.youthmoa.api.dto.request.UserLoginRequest
+import com.project.youthmoa.api.dto.request.*
 import com.project.youthmoa.api.dto.response.*
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.service.UserService
@@ -47,6 +44,13 @@ class UserController(
         userRepository.findAllByNameAndPhone(request.name, request.phone)
             .map { FindEmailResponse.from(it) }
             .let { FindEmailListResponse(it) }
+
+    @PostMapping("/reset-password")
+    fun resetPassword(
+        @RequestBody request: ResetPasswordRequest,
+    ) {
+        userService.resetPassword(request.email)
+    }
 
     @AuthenticationRequired
     @PutMapping("/{userId}")

@@ -25,6 +25,8 @@ interface UserService {
         request: UpdateUserInfoRequest,
     ): UserResponse
 
+    fun resetPassword(email: String)
+
     fun withdraw(userId: Long)
 
     @Service
@@ -33,6 +35,7 @@ interface UserService {
         private val userRepository: UserRepository,
         private val passwordEncoder: PasswordEncoder,
         private val tokenService: TokenService,
+        private val emailService: EmailService,
     ) : UserService {
         @Transactional
         override fun signUp(request: CreateUserRequest): UserLoginResponse {
@@ -80,6 +83,16 @@ interface UserService {
                 phone = request.newPhone
             }
             return UserResponse.from(user)
+        }
+
+        @Transactional
+        override fun resetPassword(email: String) {
+            val user = userRepository.findByEmailOrThrow(email)
+
+            val randomPassword = (100000..999999).random().toString()
+            user.encPassword = passwordEncoder.encode(randomPassword)
+
+            emailService.sendTempPassword(user.email, randomPassword)
         }
 
         @Transactional
