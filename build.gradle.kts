@@ -47,6 +47,8 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 
     implementation("org.springframework.boot:spring-boot-starter-mail")
+
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
 
 kotlin {

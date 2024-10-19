@@ -43,7 +43,7 @@ class UserController(
 
     @GetMapping("/emails")
     override fun findAllEmailByNameAndPhone(request: FindEmailRequest) =
-        userRepository.findAllByNameAndPhone(request.name, request.phone.value)
+        userRepository.findAllByNameAndPhone(request.name, request.phone)
             .map { FindEmailResponse.from(it) }
             .let { FindEmailListResponse(it) }
 
@@ -51,7 +51,7 @@ class UserController(
     fun resetPassword(
         @RequestBody request: ResetPasswordRequest,
     ) {
-        userInfoService.resetPassword(request.email.value)
+        userInfoService.resetPassword(request.email)
     }
 
     @AuthenticationRequired

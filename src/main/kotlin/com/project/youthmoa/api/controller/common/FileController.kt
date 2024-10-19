@@ -5,7 +5,10 @@ import com.project.youthmoa.api.controller.common.spec.FileApiSpec
 import com.project.youthmoa.api.dto.response.FileMetaResponse
 import com.project.youthmoa.common.auth.AuthenticationUtils
 import com.project.youthmoa.common.util.FileManager
+import com.project.youthmoa.common.util.RateLimiter
+import com.project.youthmoa.common.util.rateLimit
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -22,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/common/files")
 class FileController(
     private val fileManager: FileManager,
+    @Qualifier("fileUploadRateLimiter") private val rateLimiter: RateLimiter,
 ) : FileApiSpec {
     @AuthenticationRequired
     @PostMapping(
@@ -33,7 +37,9 @@ class FileController(
         @RequestPart file: MultipartFile,
     ): FileMetaResponse {
         val loginUser = AuthenticationUtils.getCurrentLoginUser()
-        return fileManager.uploadFile(loginUser.id, file)
+        return rateLimit(rateLimiter, loginUser.id) {
+            fileManager.uploadFile(loginUser.id, file)
+        }
     }
 
     @GetMapping("/{fileId}/download")

@@ -15,4 +15,5 @@ enum class ErrorType(
     TOO_LARGE_FILE(413, "파일 크기가 너무 크네요"),
     FILE_ACTION_FAILED(400, "파일 업/다운로드에 실패했어요"),
     SEND_EMAIL_FAIL(400, "이메일 전송에 실패했어요"),
+    TOO_MANY_REQUEST(429, "짧은 시간에 너무 많은 요청을 보냈어요. 잠시 후 다시 시도해주세요"),
 }

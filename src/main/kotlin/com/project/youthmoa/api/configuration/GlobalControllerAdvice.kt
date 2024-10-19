@@ -3,6 +3,7 @@ package com.project.youthmoa.api.configuration
 import com.project.youthmoa.api.dto.response.ErrorResponse
 import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.common.exception.ForbiddenException
+import com.project.youthmoa.common.exception.RateLimitExceededException
 import com.project.youthmoa.common.exception.UnauthorizedException
 import com.project.youthmoa.common.util.Logger.logger
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -72,6 +73,15 @@ class GlobalControllerAdvice(
                     ErrorType.TOO_LARGE_FILE,
                     "파일이 너무 커요. 크기는 $maxFileSize 이하여야 해요",
                 ),
+            )
+    }
+
+    @ExceptionHandler(RateLimitExceededException::class)
+    fun handleRateLimitException(e: RateLimitExceededException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.TOO_MANY_REQUESTS)
+            .body(
+                ErrorResponse.from(ErrorType.TOO_MANY_REQUEST),
             )
     }
 

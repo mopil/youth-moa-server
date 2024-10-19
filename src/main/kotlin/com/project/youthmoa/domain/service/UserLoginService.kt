@@ -28,7 +28,7 @@ class UserLoginServiceImpl(
     private val tokenManager: TokenManager,
 ) : UserLoginService {
     override fun signUp(request: CreateUserRequest): UserLoginResponse {
-        val encPassword = passwordEncoder.encode(request.password.value)
+        val encPassword = passwordEncoder.encode(request.password)
 
         val user = userRepository.save(request.toEntity(encPassword))
 
@@ -41,7 +41,7 @@ class UserLoginServiceImpl(
     }
 
     override fun login(request: UserLoginRequest): UserLoginResponse {
-        val user = userRepository.findByEmailOrThrow(request.email.value)
+        val user = userRepository.findByEmailOrThrow(request.email)
 
         if (passwordEncoder.matches(request.password, user.encPassword).not()) {
             throw UnauthorizedException(ErrorType.INVALID_PASSWORD.defaultMessage)

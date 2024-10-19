@@ -40,10 +40,10 @@ class UserInfoServiceImpl(
 
         user.apply {
             name = request.newName
-            encPassword = passwordEncoder.encode(request.newPassword.value)
+            encPassword = passwordEncoder.encode(request.newPassword)
             gender = request.newGender
             address = request.newAddress
-            phone = request.newPhone.value
+            phone = request.newPhone
         }
         return UserResponse.from(user)
     }

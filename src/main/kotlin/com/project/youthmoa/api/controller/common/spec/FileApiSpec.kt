@@ -31,6 +31,11 @@ interface FileApiSpec {
                 description = "[errorType:TOO_LARGE_FILE] 파일 크기 초과",
                 content = [Content(schema = Schema(implementation = ErrorResponse::class))],
             ),
+            ApiResponse(
+                responseCode = "429",
+                description = "[errorType:TOO_MANY_REQUEST] 짧은 시간 동안 너무 많은 요청",
+                content = [Content(schema = Schema(implementation = ErrorResponse::class))],
+            ),
         ],
     )
     fun uploadFile(file: MultipartFile): FileMetaResponse
