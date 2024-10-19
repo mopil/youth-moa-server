@@ -38,7 +38,7 @@ class GlobalControllerAdvice(
 
     @ExceptionHandler(UnauthorizedException::class)
     fun handleUnauthorizedException(ex: UnauthorizedException): ResponseEntity<ErrorResponse> {
-        println(ex.message)
+        logger.warn(ex.message)
         return ResponseEntity
             .status(HttpStatus.UNAUTHORIZED)
             .body(ErrorResponse.withMessageOrDefault(ErrorType.UNAUTHORIZED, ex.message))
@@ -46,7 +46,7 @@ class GlobalControllerAdvice(
 
     @ExceptionHandler(ForbiddenException::class)
     fun handleUnauthorizedException(ex: ForbiddenException): ResponseEntity<ErrorResponse> {
-        println(ex.message)
+        logger.warn(ex.message)
         return ResponseEntity
             .status(HttpStatus.FORBIDDEN)
             .body(ErrorResponse.withMessageOrDefault(ErrorType.FORBIDDEN, ex.message))

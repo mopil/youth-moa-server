@@ -8,6 +8,11 @@ enum class Gender {
     여,
 }
 
+enum class UserRole {
+    USER,
+    ADMIN,
+}
+
 @Entity
 class User(
     val email: String,
@@ -16,6 +21,8 @@ class User(
     var name: String,
     var address: String,
     var birthday: LocalDate,
+    @Enumerated(EnumType.STRING)
+    val role: UserRole = UserRole.USER,
     @Enumerated(EnumType.STRING)
     var gender: Gender,
     @OneToMany(mappedBy = "applier", cascade = [CascadeType.ALL], orphanRemoval = true)

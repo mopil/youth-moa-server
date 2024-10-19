@@ -40,7 +40,7 @@ interface UserService {
 
             val user = userRepository.save(request.toEntity(encPassword))
 
-            val tokenInfo = tokenService.generateAccessToken(user.id, "USER")
+            val tokenInfo = tokenService.generateAccessToken(user.id, user.role.name)
 
             return UserLoginResponse(
                 userInfo = UserResponse.from(user),
@@ -51,11 +51,11 @@ interface UserService {
         override fun login(request: UserLoginRequest): UserLoginResponse {
             val user = userRepository.findByEmailOrThrow(request.email)
 
-            if (passwordEncoder.matches(request.password, user.encPassword)) {
+            if (passwordEncoder.matches(request.password, user.encPassword).not()) {
                 throw UnauthorizedException(ErrorType.INVALID_PASSWORD.defaultMessage)
             }
 
-            val tokenInfo = tokenService.generateAccessToken(user.id, "USER")
+            val tokenInfo = tokenService.generateAccessToken(user.id, user.role.name)
 
             return UserLoginResponse(
                 userInfo = UserResponse.from(user),

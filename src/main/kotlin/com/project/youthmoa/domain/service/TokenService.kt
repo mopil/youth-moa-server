@@ -2,6 +2,8 @@ package com.project.youthmoa.domain.service
 
 import com.project.youthmoa.api.dto.response.TokenResponse
 import com.project.youthmoa.common.auth.UserPrincipal
+import com.project.youthmoa.common.util.Logger.logger
+import com.project.youthmoa.common.util.SUPER_ADMIN_USER_ID
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import io.jsonwebtoken.Jwts
@@ -53,13 +55,20 @@ interface TokenService {
         }
 
         override fun resolveToken(token: String): Authentication {
-            val claims =
-                Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .body
-            val userId = claims["userId"] as Int
+            // 0000은 테스트용 토큰 (어드민 자동 로그인)
+            val userId =
+                if (token == "0000") {
+                    logger.info("Super admin auto login")
+                    SUPER_ADMIN_USER_ID
+                } else {
+                    val claims =
+                        Jwts.parserBuilder()
+                            .setSigningKey(key)
+                            .build()
+                            .parseClaimsJws(token)
+                            .body
+                    claims["userId"] as Int
+                }
             val user = userRepository.findByIdOrThrow(userId.toLong())
             // authorities를 넣어주지 않으면 isAuthentication=false로 설정되니 주의
             return UsernamePasswordAuthenticationToken(

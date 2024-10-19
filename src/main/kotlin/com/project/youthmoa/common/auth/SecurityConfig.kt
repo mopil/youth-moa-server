@@ -27,8 +27,7 @@ class SecurityConfig(
             .httpBasic { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                    .requestMatchers(*permittedUris).permitAll()
+                it.requestMatchers(*permittedUris).permitAll()
                     .anyRequest().authenticated()
             }
             .addFilterBefore(
