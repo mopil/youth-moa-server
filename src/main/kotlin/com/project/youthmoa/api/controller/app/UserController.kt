@@ -1,7 +1,7 @@
-package com.project.youthmoa.api.app
+package com.project.youthmoa.api.controller.app
 
-import com.project.youthmoa.api.app.spec.UserApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
+import com.project.youthmoa.api.controller.app.spec.UserApiSpec
 import com.project.youthmoa.api.dto.request.CreateUserRequest
 import com.project.youthmoa.api.dto.request.FindEmailRequest
 import com.project.youthmoa.api.dto.request.UpdateUserInfoRequest

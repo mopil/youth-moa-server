@@ -1,6 +1,6 @@
-package com.project.youthmoa.api.app
+package com.project.youthmoa.api.controller.app
 
-import com.project.youthmoa.api.app.spec.ProgramApiSpec
+import com.project.youthmoa.api.controller.app.spec.ProgramApiSpec
 import com.project.youthmoa.api.dto.request.GetAllProgramsRequest
 import com.project.youthmoa.api.dto.response.PageResponse
 import com.project.youthmoa.api.dto.response.ProgramDetailResponse

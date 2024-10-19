@@ -11,8 +11,6 @@ enum class ProgramStatus {
 
 @Entity
 class Program(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
     var title: String,
     var description: String? = null,
     // 진행장소는 freetext인가?

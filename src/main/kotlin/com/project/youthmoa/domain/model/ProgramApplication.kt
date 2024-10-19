@@ -12,8 +12,6 @@ enum class ApplicationStatus {
 
 @Entity
 class ProgramApplication(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
     // 프로그램 신청 시 신청자 정보를 변경해서 제출 할 수 있어서 별도로 관리
     val applierEmail: String,
     val applierName: String,

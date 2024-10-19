@@ -12,5 +12,6 @@ object NoRequiredAuthentication {
             "/api/users/emails",
             "/api/programs",
             "/api/programs/{programId}",
+            "/common/files/**",
         )
 }

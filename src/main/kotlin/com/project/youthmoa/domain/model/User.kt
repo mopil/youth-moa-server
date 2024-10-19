@@ -10,8 +10,6 @@ enum class Gender {
 
 @Entity
 class User(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
     val email: String,
     var phone: String,
     var encPassword: String,

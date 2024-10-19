@@ -1,7 +1,7 @@
-package com.project.youthmoa.api.app
+package com.project.youthmoa.api.controller.app
 
-import com.project.youthmoa.api.app.spec.ProgramApplicationApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
+import com.project.youthmoa.api.controller.app.spec.ProgramApplicationApiSpec
 import com.project.youthmoa.api.dto.request.CancelProgramApplicationRequest
 import com.project.youthmoa.api.dto.request.CreateProgramApplicationRequest
 import com.project.youthmoa.api.dto.response.GetUserApplicationHistoriesResponse

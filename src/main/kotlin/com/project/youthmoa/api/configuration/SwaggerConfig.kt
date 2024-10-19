@@ -38,14 +38,21 @@ class SwaggerConfig {
     fun appApiGroup() =
         GroupedOpenApi.builder()
             .group("api")
-            .packagesToScan("com.project.youthmoa.api.app")
+            .packagesToScan("com.project.youthmoa.api.controller.app")
             .build()
 
     @Bean
     fun adminApiGroup() =
         GroupedOpenApi.builder()
             .group("admin")
-            .packagesToScan("com.project.youthmoa.api.admin")
+            .packagesToScan("com.project.youthmoa.api.controller.admin")
+            .build()
+
+    @Bean
+    fun commonApiGroup() =
+        GroupedOpenApi.builder()
+            .group("common")
+            .packagesToScan("com.project.youthmoa.api.controller.common")
             .build()
 }
 

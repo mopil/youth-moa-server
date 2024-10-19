@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.app.spec
+package com.project.youthmoa.api.controller.app.spec
 
 import com.project.youthmoa.api.dto.request.CreateUserRequest
 import com.project.youthmoa.api.dto.request.FindEmailRequest

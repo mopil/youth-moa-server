@@ -12,4 +12,5 @@ enum class ErrorType(
     INVALID_TOKEN(401, "유효하지 않는 인증 토큰이에요"),
     FORBIDDEN(403, "해당 요청을 수행할 권한이 없어요"),
     INTERNAL_SERVER_ERROR(500, "알 수 없는 오류가 발생했어요"),
+    TOO_LARGE_FILE(413, "파일 크기가 너무 크네요"),
 }

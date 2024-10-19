@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.admin
+package com.project.youthmoa.api.controller.admin
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.RequestMapping

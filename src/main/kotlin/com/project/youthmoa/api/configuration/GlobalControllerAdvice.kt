@@ -6,13 +6,17 @@ import com.project.youthmoa.common.exception.ForbiddenException
 import com.project.youthmoa.common.exception.UnauthorizedException
 import com.project.youthmoa.common.util.Logger.logger
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.multipart.MaxUploadSizeExceededException
 
 @RestControllerAdvice
-class GlobalControllerAdvice {
+class GlobalControllerAdvice(
+    @Value("\${spring.servlet.multipart.max-file-size}") private val maxFileSize: String,
+) {
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNotFoundException(): ResponseEntity<ErrorResponse> {
         return ResponseEntity
@@ -46,6 +50,18 @@ class GlobalControllerAdvice {
         return ResponseEntity
             .status(HttpStatus.FORBIDDEN)
             .body(ErrorResponse.withMessageOrDefault(ErrorType.FORBIDDEN, ex.message))
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException::class)
+    fun handleMaxSizeException(e: MaxUploadSizeExceededException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity
+            .status(HttpStatus.PAYLOAD_TOO_LARGE)
+            .body(
+                ErrorResponse.withMessageOrDefault(
+                    ErrorType.TOO_LARGE_FILE,
+                    "파일이 너무 커요. 크기는 $maxFileSize 이하여야 해요",
+                ),
+            )
     }
 
     @ApiResponse(

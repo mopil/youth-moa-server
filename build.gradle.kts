@@ -43,6 +43,8 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
     implementation("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
     implementation("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 }
 
 kotlin {
