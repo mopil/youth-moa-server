@@ -4,8 +4,6 @@ import com.project.youthmoa.api.app.request.*
 import com.project.youthmoa.api.app.response.*
 import com.project.youthmoa.api.app.spec.UserApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
-import com.project.youthmoa.api.dto.request.*
-import com.project.youthmoa.api.dto.response.*
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.service.UserInfoService
 import com.project.youthmoa.domain.service.UserLoginService

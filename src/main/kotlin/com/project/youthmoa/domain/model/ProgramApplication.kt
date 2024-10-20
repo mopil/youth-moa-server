@@ -29,4 +29,12 @@ class ProgramApplication(
     @Column(name = "attachment_file_ids")
     @Convert(converter = CommaToLongListConverter::class)
     var attachmentFileIds: List<Long>,
-) : BaseEntity()
+) : BaseEntity() {
+    fun isApproved() = status == ProgramApplicationStatus.승인
+
+    fun isRejected() = status == ProgramApplicationStatus.반려
+
+    fun isCanceled() = status == ProgramApplicationStatus.취소
+
+    fun isWaiting() = status == ProgramApplicationStatus.대기
+}

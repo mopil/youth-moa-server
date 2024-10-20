@@ -5,6 +5,8 @@ import com.project.youthmoa.api.app.request.CreateProgramApplicationRequest
 import com.project.youthmoa.api.app.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.api.app.spec.ProgramApplicationApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
+import com.project.youthmoa.domain.service.CancelProgramApplication
+import com.project.youthmoa.domain.service.CreateProgramApplication
 import com.project.youthmoa.domain.service.ProgramApplicationService
 import org.springframework.web.bind.annotation.*
 
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/applications")
 class ProgramApplicationController(
     private val programApplicationService: ProgramApplicationService,
+    private val createProgramApplication: CreateProgramApplication,
+    private val cancelProgramApplication: CancelProgramApplication,
 ) : ProgramApplicationApiSpec {
     @AuthenticationRequired
     @GetMapping
@@ -24,7 +28,7 @@ class ProgramApplicationController(
     override fun createApplication(
         @RequestBody request: CreateProgramApplicationRequest,
     ): Long {
-        return programApplicationService.createProgramApplication(request)
+        return createProgramApplication(request)
     }
 
     @AuthenticationRequired
@@ -33,6 +37,6 @@ class ProgramApplicationController(
         @PathVariable applicationId: Long,
         @RequestBody request: CancelProgramApplicationRequest,
     ) {
-        programApplicationService.cancelProgramApplication(applicationId, request)
+        cancelProgramApplication(applicationId, request)
     }
 }

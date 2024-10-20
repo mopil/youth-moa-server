@@ -33,7 +33,24 @@ class Program(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id")
     var youthCenter: YouthCenter,
-) : BaseEntity()
+) : BaseEntity() {
+    fun isEnd() = status == ProgramStatus.마감
+
+    fun isInProgress() = status == ProgramStatus.진행중
+
+    fun addAppliedUserCount() {
+        val nextUserCount = currentAppliedUserCount + 1
+        if (nextUserCount > maxUserCount) {
+            throw IllegalStateException("최대 신청 인원($maxUserCount)을 초과하였습니다.")
+        }
+
+        currentAppliedUserCount = nextUserCount
+
+        if (nextUserCount == maxUserCount) {
+            status = ProgramStatus.마감
+        }
+    }
+}
 
 @Entity
 class ProgramFreeQuestion(

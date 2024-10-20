@@ -13,6 +13,8 @@ data class ProgramSimpleResponse(
     val applyStartDate: LocalDate,
     @Schema(description = "yyyy-MM-dd 포맷")
     val applyEndDate: LocalDate,
+    val currentAppliedUserCount: Int,
+    val maxUserCount: Int,
 ) {
     companion object {
         fun from(program: Program) =
@@ -22,6 +24,8 @@ data class ProgramSimpleResponse(
                 status = program.status,
                 applyStartDate = program.applyStartDate,
                 applyEndDate = program.applyEndDate,
+                currentAppliedUserCount = program.currentAppliedUserCount,
+                maxUserCount = program.maxUserCount,
             )
     }
 }
