@@ -1,6 +1,6 @@
 package com.project.youthmoa.api.configuration
 
-import com.project.youthmoa.api.dto.response.ErrorResponse
+import com.project.youthmoa.api.common.response.ErrorResponse
 import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.common.exception.ForbiddenException
 import com.project.youthmoa.common.exception.RateLimitExceededException

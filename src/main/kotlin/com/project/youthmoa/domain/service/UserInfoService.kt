@@ -1,7 +1,7 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.dto.request.UpdateUserInfoRequest
-import com.project.youthmoa.api.dto.response.UserResponse
+import com.project.youthmoa.api.app.request.UpdateUserInfoRequest
+import com.project.youthmoa.api.app.response.UserResponse
 import com.project.youthmoa.common.auth.AuthenticationUtils.checkIsSelf
 import com.project.youthmoa.common.util.SendEmail
 import com.project.youthmoa.domain.repository.UserRepository

@@ -1,8 +1,8 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.dto.request.CancelProgramApplicationRequest
-import com.project.youthmoa.api.dto.request.CreateProgramApplicationRequest
-import com.project.youthmoa.api.dto.response.GetUserApplicationHistoriesResponse
+import com.project.youthmoa.api.app.request.CancelProgramApplicationRequest
+import com.project.youthmoa.api.app.request.CreateProgramApplicationRequest
+import com.project.youthmoa.api.app.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.common.auth.AuthenticationUtils
 import com.project.youthmoa.common.exception.ForbiddenException
 import com.project.youthmoa.domain.model.ProgramApplication

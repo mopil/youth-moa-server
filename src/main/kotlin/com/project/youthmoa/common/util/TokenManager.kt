@@ -1,6 +1,6 @@
 package com.project.youthmoa.common.util
 
-import com.project.youthmoa.api.dto.response.TokenResponse
+import com.project.youthmoa.api.common.response.TokenResponse
 import com.project.youthmoa.common.auth.UserPrincipal
 import com.project.youthmoa.common.util.Logger.logger
 import com.project.youthmoa.domain.repository.UserRepository

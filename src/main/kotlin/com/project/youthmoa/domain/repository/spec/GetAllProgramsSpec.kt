@@ -1,6 +1,6 @@
 package com.project.youthmoa.domain.repository.spec
 
-import com.project.youthmoa.api.dto.request.GetAllProgramsRequest
+import com.project.youthmoa.api.app.request.GetAllProgramsRequest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 

@@ -3,7 +3,7 @@ package com.project.youthmoa.domain.repository
 import com.project.youthmoa.domain.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface UserRepository : JpaRepository<User, Long> {
+interface UserRepository : JpaRepository<User, Long>, UserJdslRepository {
     fun findByEmail(email: String): User?
 
     fun findAllByNameAndPhone(
