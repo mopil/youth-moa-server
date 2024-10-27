@@ -1,39 +1,48 @@
 package com.project.youthmoa.domain.service
 
 import com.project.youthmoa.api.app.request.CreateProgramApplicationRequest
-import com.project.youthmoa.common.auth.AuthenticationUtils
+import com.project.youthmoa.common.util.FileManager
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.model.ProgramApplication
 import com.project.youthmoa.domain.model.User
-import com.project.youthmoa.domain.repository.FileMetaRepository
-import com.project.youthmoa.domain.repository.ProgramApplicationRepository
-import com.project.youthmoa.domain.repository.ProgramRepository
-import com.project.youthmoa.domain.repository.findByIdOrThrow
+import com.project.youthmoa.domain.repository.*
 import com.project.youthmoa.domain.type.ProgramApplicationStatus
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 fun interface CreateProgramApplication {
-    operator fun invoke(request: CreateProgramApplicationRequest): Long
+    operator fun invoke(
+        userId: Long,
+        request: CreateProgramApplicationRequest,
+    ): Long
 
     @Component
     class Default(
-        private val fileMetaRepository: FileMetaRepository,
+        private val fileManager: FileManager,
+        private val userRepository: UserRepository,
         private val programRepository: ProgramRepository,
         private val programApplicationRepository: ProgramApplicationRepository,
     ) : CreateProgramApplication {
         @Transactional
-        override fun invoke(request: CreateProgramApplicationRequest): Long {
-            val loginUser = AuthenticationUtils.getCurrentLoginUser()
+        override fun invoke(
+            userId: Long,
+            request: CreateProgramApplicationRequest,
+        ): Long {
+            checkBeforeApplicationStatusIfExist(request.programId, userId)
+            fileManager.checkExistence(request.attachmentFileIds)
+
             val program = programRepository.findByIdOrThrow(request.programId)
+            val user = userRepository.findByIdOrThrow(userId)
 
-            checkBeforeApplicationStatusIfExist(program.id, loginUser.id)
+            val application =
+                if (program.isNeedAdminApprove.not()) {
+                    program.addAppliedUserCount()
+                    createAutoApprovedApplication(program, user, request)
+                } else {
+                    createApproveWaitingApplication(program, user, request)
+                }
 
-            if (program.isNeedApprove.not()) {
-                program.addAppliedUserCount()
-            }
-
-            val application = createApplication(program, loginUser, request)
             return application.id
         }
 
@@ -52,7 +61,7 @@ fun interface CreateProgramApplication {
             }
         }
 
-        private fun createApplication(
+        private fun createApproveWaitingApplication(
             program: Program,
             loginUser: User,
             request: CreateProgramApplicationRequest,
@@ -64,7 +73,26 @@ fun interface CreateProgramApplication {
                 applierEmail = request.applierEmail,
                 applierAddress = request.applierAddress,
                 attachmentFileIds = request.attachmentFileIds,
-                status = if (program.isNeedApprove) ProgramApplicationStatus.대기 else ProgramApplicationStatus.승인,
+                status = ProgramApplicationStatus.대기,
+                applier = loginUser,
+            ).let(programApplicationRepository::save)
+        }
+
+        private fun createAutoApprovedApplication(
+            program: Program,
+            loginUser: User,
+            request: CreateProgramApplicationRequest,
+        ): ProgramApplication {
+            return ProgramApplication(
+                program = program,
+                applierName = request.applierName,
+                applierPhone = request.applierPhone,
+                applierEmail = request.applierEmail,
+                applierAddress = request.applierAddress,
+                attachmentFileIds = request.attachmentFileIds,
+                status = ProgramApplicationStatus.승인,
+                adminComment = "자동 승인",
+                adminActionDateTime = LocalDateTime.now(),
                 applier = loginUser,
             ).let(programApplicationRepository::save)
         }

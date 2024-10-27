@@ -2,7 +2,6 @@ package com.project.youthmoa.domain.service
 
 import com.project.youthmoa.api.app.request.UpdateUserInfoRequest
 import com.project.youthmoa.api.app.response.UserResponse
-import com.project.youthmoa.common.auth.AuthenticationUtils.checkIsSelf
 import com.project.youthmoa.common.util.SendEmail
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.findByEmailOrThrow
@@ -34,8 +33,6 @@ class UserInfoServiceImpl(
         userId: Long,
         request: UpdateUserInfoRequest,
     ): UserResponse {
-        checkIsSelf(userId)
-
         val user = userRepository.findByIdOrThrow(userId)
 
         user.apply {
@@ -64,8 +61,6 @@ class UserInfoServiceImpl(
 
     @Transactional
     override fun withdraw(userId: Long) {
-        checkIsSelf(userId)
-
         val user = userRepository.findByIdOrThrow(userId)
 
         user.isDeleted = true

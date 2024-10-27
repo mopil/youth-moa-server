@@ -4,6 +4,7 @@ import com.project.youthmoa.api.app.request.*
 import com.project.youthmoa.api.app.response.*
 import com.project.youthmoa.api.app.spec.UserApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
+import com.project.youthmoa.common.util.AuthManager
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.service.UserInfoService
 import com.project.youthmoa.domain.service.UserLoginService
@@ -16,6 +17,7 @@ class UserController(
     private val userLoginService: UserLoginService,
     private val userInfoService: UserInfoService,
     private val userRepository: UserRepository,
+    private val authManager: AuthManager,
 ) : UserApiSpec {
     @PostMapping("/sign-up")
     override fun signUp(
@@ -49,7 +51,7 @@ class UserController(
             .let { FindEmailListResponse(it) }
 
     @PostMapping("/reset-password")
-    fun resetPassword(
+    override fun resetPassword(
         @Valid @RequestBody request: ResetPasswordRequest,
     ) {
         userInfoService.resetPassword(request.email)
@@ -61,6 +63,7 @@ class UserController(
         @PathVariable userId: Long,
         @Valid @RequestBody request: UpdateUserInfoRequest,
     ): UserResponse {
+        authManager.checkIsSelf(userId)
         return userInfoService.updateUserInfo(userId, request)
     }
 
@@ -69,6 +72,7 @@ class UserController(
     override fun withdraw(
         @PathVariable userId: Long,
     ) {
+        authManager.checkIsSelf(userId)
         userInfoService.withdraw(userId)
     }
 }

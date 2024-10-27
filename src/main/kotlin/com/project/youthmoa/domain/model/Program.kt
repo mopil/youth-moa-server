@@ -25,8 +25,7 @@ class Program(
     var attachmentFileIds: List<Long> = emptyList(),
     var programImageFileId: Long? = null,
     var contactNumber: String? = null,
-    // 프로그램 신청 시 관리자 수락이 필요한지 여부
-    var isNeedApprove: Boolean = true,
+    var isNeedAdminApprove: Boolean = true,
     @Column(name = "lectures")
     @Convert(converter = CommaToStringListConverter::class)
     var lectures: List<String>,
@@ -73,7 +72,7 @@ class Program(
                 attachmentFileIds = request.attachmentFileIds,
                 programImageFileId = request.programImageFileId,
                 contactNumber = request.contactNumber,
-                isNeedApprove = request.isNeedApprove,
+                isNeedAdminApprove = request.isNeedApprove,
                 lectures = request.lectures,
                 youthCenter = youthCenter,
             )

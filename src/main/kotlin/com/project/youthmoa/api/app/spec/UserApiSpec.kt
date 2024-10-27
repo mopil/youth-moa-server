@@ -1,9 +1,6 @@
 package com.project.youthmoa.api.app.spec
 
-import com.project.youthmoa.api.app.request.CreateUserRequest
-import com.project.youthmoa.api.app.request.FindEmailRequest
-import com.project.youthmoa.api.app.request.UpdateUserInfoRequest
-import com.project.youthmoa.api.app.request.UserLoginRequest
+import com.project.youthmoa.api.app.request.*
 import com.project.youthmoa.api.app.response.*
 import com.project.youthmoa.api.common.response.ErrorResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -59,6 +56,9 @@ interface UserApiSpec {
     fun findAllEmailByNameAndPhone(
         @ParameterObject request: FindEmailRequest,
     ): FindEmailListResponse
+
+    @Operation(summary = "비밀번호 재설정 (이메일로 임시 비밀번호 발급)")
+    fun resetPassword(request: ResetPasswordRequest)
 
     @Operation(summary = "사용자 정보 수정")
     @ApiResponses(

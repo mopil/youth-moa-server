@@ -23,6 +23,11 @@ interface FileManager {
     ): FileMetaResponse
 
     fun downloadFile(fileId: Long): DownloadFileResource
+
+    /**
+     * 파일이 존재하는지 확인
+     */
+    fun checkExistence(fileIds: List<Long>)
 }
 
 @Component
@@ -77,5 +82,11 @@ class FileManagerS3Impl(
             contentLength = s3Object.objectMetadata.contentLength,
             inputStreamResource = InputStreamResource(s3Object.objectContent),
         )
+    }
+
+    override fun checkExistence(fileIds: List<Long>) {
+        fileIds.forEach {
+            fileMetaRepository.findByIdOrThrow(it)
+        }
     }
 }

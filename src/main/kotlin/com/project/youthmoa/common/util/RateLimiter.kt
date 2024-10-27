@@ -4,9 +4,18 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.project.youthmoa.common.exception.RateLimitExceededException
 import java.util.concurrent.TimeUnit
 
+/**
+ * 특정 사용자의 API 호출 횟수를 제한한다
+ */
 interface RateLimiter {
+    /**
+     * userId의 호출 횟수가 제한을 초과하는지 확인
+     */
     fun checkLimit(userId: Long)
 
+    /**
+     * userId의 호출 횟수를 증가
+     */
     fun increaseCount(userId: Long)
 
     class CaffeineLocalCacheImpl(

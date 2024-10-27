@@ -5,6 +5,7 @@ import com.project.youthmoa.api.app.request.CreateProgramApplicationRequest
 import com.project.youthmoa.api.app.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.api.app.spec.ProgramApplicationApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
+import com.project.youthmoa.common.util.AuthManager
 import com.project.youthmoa.domain.service.CancelProgramApplication
 import com.project.youthmoa.domain.service.CreateProgramApplication
 import com.project.youthmoa.domain.service.ProgramApplicationService
@@ -17,11 +18,13 @@ class ProgramApplicationController(
     private val programApplicationService: ProgramApplicationService,
     private val createProgramApplication: CreateProgramApplication,
     private val cancelProgramApplication: CancelProgramApplication,
+    private val authManager: AuthManager,
 ) : ProgramApplicationApiSpec {
     @AuthenticationRequired
     @GetMapping
     override fun getUserProgramHistories(): GetUserApplicationHistoriesResponse {
-        return programApplicationService.getUserApplicationHistories()
+        val loginUser = authManager.getCurrentLoginUser()
+        return programApplicationService.getUserApplicationHistories(loginUser.id)
     }
 
     @AuthenticationRequired
@@ -29,7 +32,8 @@ class ProgramApplicationController(
     override fun createApplication(
         @Valid @RequestBody request: CreateProgramApplicationRequest,
     ): Long {
-        return createProgramApplication(request)
+        val loginUser = authManager.getCurrentLoginUser()
+        return createProgramApplication(loginUser.id, request)
     }
 
     @AuthenticationRequired
@@ -38,6 +42,7 @@ class ProgramApplicationController(
         @PathVariable applicationId: Long,
         @Valid @RequestBody request: CancelProgramApplicationRequest,
     ) {
-        cancelProgramApplication(applicationId, request)
+        val loginUser = authManager.getCurrentLoginUser()
+        cancelProgramApplication(loginUser.id, applicationId, request)
     }
 }

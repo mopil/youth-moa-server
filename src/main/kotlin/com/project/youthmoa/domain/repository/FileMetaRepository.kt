@@ -7,5 +7,5 @@ import org.springframework.data.repository.findByIdOrNull
 interface FileMetaRepository : JpaRepository<FileMeta, Long>
 
 fun FileMetaRepository.findByIdOrThrow(id: Long): FileMeta {
-    return findByIdOrNull(id) ?: throw NoSuchElementException()
+    return findByIdOrNull(id) ?: throw NoSuchElementException("$id 에 해당하는 파일 정보가 없습니다.")
 }

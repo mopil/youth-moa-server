@@ -51,6 +51,8 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 }
 
 kotlin {

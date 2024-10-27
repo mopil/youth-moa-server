@@ -3,8 +3,9 @@ package com.project.youthmoa.api.configuration
 import com.project.youthmoa.api.common.response.ErrorResponse
 import com.project.youthmoa.api.common.response.FieldErrorResponse
 import com.project.youthmoa.common.exception.*
-import com.project.youthmoa.common.util.Logger.logger
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,6 +19,8 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException
 class GlobalControllerAdvice(
     @Value("\${spring.servlet.multipart.max-file-size}") private val maxFileSize: String,
 ) {
+    val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNotFoundException(): ResponseEntity<ErrorResponse> {
         return ResponseEntity

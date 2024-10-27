@@ -1,7 +1,6 @@
 package com.project.youthmoa.domain.service
 
 import com.project.youthmoa.api.app.request.CancelProgramApplicationRequest
-import com.project.youthmoa.common.auth.AuthenticationUtils
 import com.project.youthmoa.common.exception.ForbiddenException
 import com.project.youthmoa.domain.model.ProgramApplication
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 
 fun interface CancelProgramApplication {
     operator fun invoke(
+        userId: Long,
         applicationId: Long,
         request: CancelProgramApplicationRequest,
     )
@@ -22,10 +22,10 @@ fun interface CancelProgramApplication {
     ) : CancelProgramApplication {
         @Transactional
         override fun invoke(
+            userId: Long,
             applicationId: Long,
             request: CancelProgramApplicationRequest,
         ) {
-            val loginUser = AuthenticationUtils.getCurrentLoginUser()
             val application: ProgramApplication = programApplicationRepository.findByIdOrThrow(applicationId)
 
             if (application.isApproved()) {
@@ -36,7 +36,7 @@ fun interface CancelProgramApplication {
                 throw IllegalStateException("반려된 건은 취소할 수 없습니다.")
             }
 
-            if (application.applier.id != loginUser.id) {
+            if (application.applier.id != userId) {
                 throw ForbiddenException("신청자만 취소할 수 있습니다.")
             }
 

@@ -2,12 +2,13 @@ package com.project.youthmoa.common.util
 
 import com.project.youthmoa.api.common.response.TokenResponse
 import com.project.youthmoa.common.auth.UserPrincipal
-import com.project.youthmoa.common.util.Logger.logger
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -30,6 +31,7 @@ interface TokenManager {
         @Value("\${jwt.ttl-seconds}") private val tokenValidSeconds: Long,
         private val userRepository: UserRepository,
     ) : TokenManager {
+        val logger: Logger = LoggerFactory.getLogger(this::class.java)
         val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray())
 
         override fun generateToken(
