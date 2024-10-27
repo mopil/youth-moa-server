@@ -8,6 +8,7 @@ import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.domain.service.CancelProgramApplication
 import com.project.youthmoa.domain.service.CreateProgramApplication
 import com.project.youthmoa.domain.service.ProgramApplicationService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -26,7 +27,7 @@ class ProgramApplicationController(
     @AuthenticationRequired
     @PostMapping
     override fun createApplication(
-        @RequestBody request: CreateProgramApplicationRequest,
+        @Valid @RequestBody request: CreateProgramApplicationRequest,
     ): Long {
         return createProgramApplication(request)
     }
@@ -35,7 +36,7 @@ class ProgramApplicationController(
     @PutMapping("/{applicationId}/cancel")
     override fun cancelApplication(
         @PathVariable applicationId: Long,
-        @RequestBody request: CancelProgramApplicationRequest,
+        @Valid @RequestBody request: CancelProgramApplicationRequest,
     ) {
         cancelProgramApplication(applicationId, request)
     }

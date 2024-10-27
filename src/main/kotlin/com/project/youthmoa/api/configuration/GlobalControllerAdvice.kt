@@ -1,16 +1,15 @@
 package com.project.youthmoa.api.configuration
 
 import com.project.youthmoa.api.common.response.ErrorResponse
-import com.project.youthmoa.common.exception.ErrorType
-import com.project.youthmoa.common.exception.ForbiddenException
-import com.project.youthmoa.common.exception.RateLimitExceededException
-import com.project.youthmoa.common.exception.UnauthorizedException
+import com.project.youthmoa.api.common.response.FieldErrorResponse
+import com.project.youthmoa.common.exception.*
 import com.project.youthmoa.common.util.Logger.logger
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.multipart.MaxUploadSizeExceededException
@@ -30,22 +29,38 @@ class GlobalControllerAdvice(
         IllegalStateException::class,
         IllegalArgumentException::class,
         HttpMessageNotReadableException::class,
+        MethodArgumentNotValidException::class,
     )
     fun handleBadRequestException(ex: Exception): ResponseEntity<ErrorResponse> {
-        val message =
-            when (ex) {
-                is HttpMessageNotReadableException -> {
-                    ex.cause?.cause?.message
+        if (ex is MethodArgumentNotValidException) {
+            val validationErrors =
+                ex.bindingResult.fieldErrors
+                    .map { FieldValidationError.from(it) }
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                    FieldErrorResponse(
+                        errorType = ErrorType.BAD_REQUEST,
+                        message = "유효하지 않은 값입니다.",
+                        fieldErrors = validationErrors,
+                    ),
+                )
+        } else {
+            val message =
+                when (ex) {
+                    is HttpMessageNotReadableException -> {
+                        ex.cause?.cause?.message
+                    }
+                    else -> {
+                        ex.message
+                    }
                 }
-                else -> {
-                    ex.message
-                }
-            }
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(
-                ErrorResponse.withMessageOrDefault(ErrorType.BAD_REQUEST, message),
-            )
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                    ErrorResponse.withMessageOrDefault(ErrorType.BAD_REQUEST, message),
+                )
+        }
     }
 
     @ExceptionHandler(UnauthorizedException::class)

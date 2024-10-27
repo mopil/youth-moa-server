@@ -7,6 +7,7 @@ import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.service.UserInfoService
 import com.project.youthmoa.domain.service.UserLoginService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -18,14 +19,14 @@ class UserController(
 ) : UserApiSpec {
     @PostMapping("/sign-up")
     override fun signUp(
-        @RequestBody request: CreateUserRequest,
+        @Valid @RequestBody request: CreateUserRequest,
     ): UserLoginResponse {
         return userLoginService.signUp(request)
     }
 
     @PostMapping("/login")
     override fun login(
-        @RequestBody request: UserLoginRequest,
+        @Valid @RequestBody request: UserLoginRequest,
     ): UserLoginResponse {
         return userLoginService.login(request)
     }
@@ -49,7 +50,7 @@ class UserController(
 
     @PostMapping("/reset-password")
     fun resetPassword(
-        @RequestBody request: ResetPasswordRequest,
+        @Valid @RequestBody request: ResetPasswordRequest,
     ) {
         userInfoService.resetPassword(request.email)
     }
@@ -58,7 +59,7 @@ class UserController(
     @PutMapping("/{userId}")
     override fun updateUserInfo(
         @PathVariable userId: Long,
-        @RequestBody request: UpdateUserInfoRequest,
+        @Valid @RequestBody request: UpdateUserInfoRequest,
     ): UserResponse {
         return userInfoService.updateUserInfo(userId, request)
     }

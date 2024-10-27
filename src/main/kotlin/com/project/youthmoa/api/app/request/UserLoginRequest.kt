@@ -1,12 +1,9 @@
 package com.project.youthmoa.api.app.request
 
-import com.project.youthmoa.domain.vo.Email
+import jakarta.validation.constraints.Email
 
 data class UserLoginRequest(
+    @field:Email
     val email: String,
     val password: String,
-) {
-    init {
-        Email(email)
-    }
-}
+)
