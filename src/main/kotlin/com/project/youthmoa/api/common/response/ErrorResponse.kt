@@ -1,7 +1,7 @@
 package com.project.youthmoa.api.common.response
 
 import com.project.youthmoa.common.exception.ErrorType
-import com.project.youthmoa.domain.vo.FieldValidationError
+import com.project.youthmoa.common.exception.FieldValidationError
 
 open class ErrorResponse(
     open val errorType: ErrorType,
