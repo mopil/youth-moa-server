@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 data class ProgramDetailResponse(
     val programId: Long,
-    val programImageUrl: String?,
+    val programImageFileId: Long?,
     val status: ProgramStatus,
     val title: String,
     val description: String?,
@@ -21,7 +21,7 @@ data class ProgramDetailResponse(
     val currentAppliedUserCount: Int,
     val maxUserCount: Int,
     val contactNumber: String?,
-    val attachmentUrl: String?,
+    val attachmentFileIds: List<Long> = emptyList(),
     val lectures: List<String>,
     @Schema(description = "주관식 질문들")
     val freeQuestions: List<String>,
@@ -32,7 +32,7 @@ data class ProgramDetailResponse(
         fun from(program: Program): ProgramDetailResponse {
             return ProgramDetailResponse(
                 programId = program.id,
-                programImageUrl = program.programImageUrl,
+                programImageFileId = program.programImageFileId,
                 status = program.status,
                 title = program.title,
                 description = program.description,
@@ -45,7 +45,7 @@ data class ProgramDetailResponse(
                 currentAppliedUserCount = program.currentAppliedUserCount,
                 maxUserCount = program.maxUserCount,
                 contactNumber = program.contactNumber,
-                attachmentUrl = program.attachmentUrl,
+                attachmentFileIds = program.attachmentFileIds,
                 lectures = program.lectures,
                 freeQuestions = program.freeQuestions.map { it.question },
                 createdAt = program.createdAt,

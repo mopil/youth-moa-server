@@ -3,6 +3,7 @@ package com.project.youthmoa.domain.service
 import com.project.youthmoa.api.app.request.CancelProgramApplicationRequest
 import com.project.youthmoa.common.auth.AuthenticationUtils
 import com.project.youthmoa.common.exception.ForbiddenException
+import com.project.youthmoa.domain.model.ProgramApplication
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import com.project.youthmoa.domain.type.ProgramApplicationStatus
@@ -25,7 +26,7 @@ fun interface CancelProgramApplication {
             request: CancelProgramApplicationRequest,
         ) {
             val loginUser = AuthenticationUtils.getCurrentLoginUser()
-            val application = programApplicationRepository.findByIdOrThrow(applicationId)
+            val application: ProgramApplication = programApplicationRepository.findByIdOrThrow(applicationId)
 
             if (application.isApproved()) {
                 throw IllegalStateException("승인된 건은 취소할 수 없습니다.")

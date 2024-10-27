@@ -19,7 +19,6 @@ object AuthenticationUtils {
             "/api/users/emails",
             "/api/programs",
             "/api/programs/{programId}",
-            "/common/files/**",
             "/admin/{adminUserId}/super-login",
             "/admin/**",
         )

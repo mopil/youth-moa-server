@@ -1,5 +1,6 @@
 package com.project.youthmoa.domain.model
 
+import com.project.youthmoa.api.admin.request.CreateProgramRequest
 import com.project.youthmoa.domain.model.converter.CommaToStringListConverter
 import com.project.youthmoa.domain.type.ProgramStatus
 import jakarta.persistence.*
@@ -20,8 +21,9 @@ class Program(
     var programEndDate: LocalDate,
     @Enumerated(EnumType.STRING)
     var status: ProgramStatus = ProgramStatus.진행중,
-    var attachmentUrl: String? = null,
-    var programImageUrl: String? = null,
+    @Convert(converter = CommaToStringListConverter::class)
+    var attachmentFileIds: List<Long> = emptyList(),
+    var programImageFileId: Long? = null,
     var contactNumber: String? = null,
     // 프로그램 신청 시 관리자 수락이 필요한지 여부
     var isNeedApprove: Boolean = true,
@@ -29,10 +31,12 @@ class Program(
     @Convert(converter = CommaToStringListConverter::class)
     var lectures: List<String>,
     @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val freeQuestions: List<ProgramFreeQuestion> = emptyList(),
+    val freeQuestions: MutableList<ProgramFreeQuestion> = arrayListOf(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id")
     var youthCenter: YouthCenter,
+    @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var applications: MutableList<ProgramApplication> = arrayListOf(),
 ) : BaseEntity() {
     fun isEnd() = status == ProgramStatus.마감
 
@@ -48,6 +52,31 @@ class Program(
 
         if (nextUserCount == maxUserCount) {
             status = ProgramStatus.마감
+        }
+    }
+
+    companion object {
+        fun ofNew(
+            request: CreateProgramRequest,
+            youthCenter: YouthCenter,
+        ): Program {
+            return Program(
+                title = request.title,
+                description = request.description,
+                location = request.location,
+                detailContent = request.detailContent,
+                maxUserCount = request.maxUserCount,
+                applyStartDate = request.applyStartDate,
+                applyEndDate = request.applyEndDate,
+                programStartDate = request.programStartDate,
+                programEndDate = request.programEndDate,
+                attachmentFileIds = request.attachmentFileIds,
+                programImageFileId = request.programImageFileId,
+                contactNumber = request.contactNumber,
+                isNeedApprove = request.isNeedApprove,
+                lectures = request.lectures,
+                youthCenter = youthCenter,
+            )
         }
     }
 }

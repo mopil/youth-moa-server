@@ -5,6 +5,7 @@ import com.project.youthmoa.common.auth.AuthenticationUtils
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.model.ProgramApplication
 import com.project.youthmoa.domain.model.User
+import com.project.youthmoa.domain.repository.FileMetaRepository
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
@@ -17,6 +18,7 @@ fun interface CreateProgramApplication {
 
     @Component
     class Default(
+        private val fileMetaRepository: FileMetaRepository,
         private val programRepository: ProgramRepository,
         private val programApplicationRepository: ProgramApplicationRepository,
     ) : CreateProgramApplication {

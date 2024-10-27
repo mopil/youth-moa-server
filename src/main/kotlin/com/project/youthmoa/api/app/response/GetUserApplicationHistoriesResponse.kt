@@ -26,7 +26,7 @@ data class GetUserApplicationHistoriesResponse(
 data class GetUserApplicationHistory(
     val programId: Long,
     val programTitle: String,
-    val programImageUrl: String?,
+    val programImageFileId: Long?,
     val applierName: String,
     val applierPhone: String,
     val applierEmail: String,
@@ -60,7 +60,7 @@ data class GetUserApplicationHistory(
             return GetUserApplicationHistory(
                 programId = programApplication.program.id,
                 programTitle = programApplication.program.title,
-                programImageUrl = programApplication.program.programImageUrl,
+                programImageFileId = programApplication.program.programImageFileId,
                 applierName = programApplication.applierName,
                 applierPhone = programApplication.applierPhone,
                 applierEmail = programApplication.applierEmail,
