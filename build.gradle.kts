@@ -53,6 +53,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+
+    val poiVersion = "4.1.2"
+    implementation("org.apache.poi:poi:$poiVersion")
+    implementation("org.apache.poi:poi-ooxml:$poiVersion")
 }
 
 kotlin {

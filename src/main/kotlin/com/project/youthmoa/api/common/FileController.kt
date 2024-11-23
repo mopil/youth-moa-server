@@ -4,8 +4,8 @@ import com.project.youthmoa.api.common.response.FileMetaResponse
 import com.project.youthmoa.api.common.spec.FileApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.common.util.AuthManager
-import com.project.youthmoa.common.util.FileManager
 import com.project.youthmoa.common.util.RateLimiter
+import com.project.youthmoa.common.util.file.FileManager
 import com.project.youthmoa.common.util.rateLimit
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Qualifier
