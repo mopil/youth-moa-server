@@ -1,10 +1,10 @@
 package com.project.youthmoa.api.app
 
 import com.project.youthmoa.api.app.request.GetAllProgramsRequest
-import com.project.youthmoa.api.app.response.PageResponse
 import com.project.youthmoa.api.app.response.ProgramDetailResponse
 import com.project.youthmoa.api.app.response.ProgramSimpleResponse
 import com.project.youthmoa.api.app.spec.ProgramApiSpec
+import com.project.youthmoa.api.common.response.PageResponse
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import com.project.youthmoa.domain.repository.spec.GetAllProgramsSpec

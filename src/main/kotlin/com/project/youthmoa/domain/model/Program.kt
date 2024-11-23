@@ -5,6 +5,7 @@ import com.project.youthmoa.domain.model.converter.CommaToStringListConverter
 import com.project.youthmoa.domain.type.ProgramStatus
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity
 class Program(
@@ -18,6 +19,7 @@ class Program(
     var applyEndDate: LocalDate,
     var programStartDate: LocalDate,
     var programEndDate: LocalDate,
+    var programStartAt: LocalDateTime? = null,
     @Enumerated(EnumType.STRING)
     var status: ProgramStatus,
     @Convert(converter = CommaToStringListConverter::class)

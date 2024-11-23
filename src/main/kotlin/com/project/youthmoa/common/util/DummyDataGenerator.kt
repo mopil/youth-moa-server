@@ -1,10 +1,13 @@
 package com.project.youthmoa.common.util
 
+import com.project.youthmoa.api.app.request.CreateProgramApplicationRequest
+import com.project.youthmoa.api.app.request.QuestionAnswer
 import com.project.youthmoa.domain.model.*
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
+import com.project.youthmoa.domain.service.CreateProgramApplication
 import com.project.youthmoa.domain.type.Gender
 import com.project.youthmoa.domain.type.ProgramStatus
 import com.project.youthmoa.domain.type.UserRole
@@ -23,6 +26,7 @@ class DummyDataGenerator(
     private val programRepository: ProgramRepository,
     private val youthCenterRepository: YouthCenterRepository,
     private val passwordEncoder: PasswordEncoder,
+    private val createProgramApplication: CreateProgramApplication,
 ) {
     @PostConstruct
     @Transactional
@@ -90,5 +94,22 @@ class DummyDataGenerator(
         }.also {
             programRepository.save(it)
         }
+
+        val request =
+            CreateProgramApplicationRequest(
+                programId = 1,
+                questionAnswers =
+                    listOf(
+                        QuestionAnswer(
+                            questionId = 1,
+                            content = "답변1",
+                        ),
+                        QuestionAnswer(
+                            questionId = 2,
+                            content = "답변2",
+                        ),
+                    ),
+            )
+        createProgramApplication(SUPER_ADMIN_USER_ID, request)
     }
 }

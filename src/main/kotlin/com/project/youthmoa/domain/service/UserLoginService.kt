@@ -3,7 +3,7 @@ package com.project.youthmoa.domain.service
 import com.project.youthmoa.api.app.request.CreateUserRequest
 import com.project.youthmoa.api.app.request.UserLoginRequest
 import com.project.youthmoa.api.app.response.UserLoginResponse
-import com.project.youthmoa.api.app.response.UserResponse
+import com.project.youthmoa.api.common.response.UserResponse
 import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.common.exception.UnauthorizedException
 import com.project.youthmoa.common.util.TokenManager

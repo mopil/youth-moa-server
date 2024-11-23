@@ -32,6 +32,8 @@ class ProgramApplication(
 
     fun isRejected() = status == ProgramApplicationStatus.반려
 
+    fun isCanceled() = status == ProgramApplicationStatus.취소
+
     fun isWaiting() = status == ProgramApplicationStatus.대기
 
     fun addAnswers(answers: List<ProgramApplicationAnswer>) {

@@ -3,6 +3,7 @@ package com.project.youthmoa.api.app.spec
 import com.project.youthmoa.api.app.request.*
 import com.project.youthmoa.api.app.response.*
 import com.project.youthmoa.api.common.response.ErrorResponse
+import com.project.youthmoa.api.common.response.UserResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

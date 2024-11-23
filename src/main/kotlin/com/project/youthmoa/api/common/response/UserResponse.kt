@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.app.response
+package com.project.youthmoa.api.common.response
 
 import com.project.youthmoa.domain.model.User
 import com.project.youthmoa.domain.type.Gender

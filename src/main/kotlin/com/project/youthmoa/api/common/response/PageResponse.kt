@@ -1,6 +1,7 @@
-package com.project.youthmoa.api.app.response
+package com.project.youthmoa.api.common.response
 
 import com.project.youthmoa.api.admin.response.GetAllUsersResponse
+import com.project.youthmoa.api.app.response.ProgramSimpleResponse
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.model.User
 import io.swagger.v3.oas.annotations.media.Schema

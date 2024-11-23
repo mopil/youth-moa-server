@@ -3,6 +3,7 @@ package com.project.youthmoa.api.app
 import com.project.youthmoa.api.app.request.*
 import com.project.youthmoa.api.app.response.*
 import com.project.youthmoa.api.app.spec.UserApiSpec
+import com.project.youthmoa.api.common.response.UserResponse
 import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.common.util.AuthManager
 import com.project.youthmoa.domain.repository.UserRepository

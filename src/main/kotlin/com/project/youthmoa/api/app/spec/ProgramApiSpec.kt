@@ -1,10 +1,10 @@
 package com.project.youthmoa.api.app.spec
 
 import com.project.youthmoa.api.app.request.GetAllProgramsRequest
-import com.project.youthmoa.api.app.response.PageResponse
 import com.project.youthmoa.api.app.response.ProgramDetailResponse
 import com.project.youthmoa.api.app.response.ProgramSimpleResponse
 import com.project.youthmoa.api.common.response.ErrorResponse
+import com.project.youthmoa.api.common.response.PageResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

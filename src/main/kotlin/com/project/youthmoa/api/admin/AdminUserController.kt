@@ -2,7 +2,7 @@ package com.project.youthmoa.api.admin
 
 import com.project.youthmoa.api.admin.request.GetAllUsersRequest
 import com.project.youthmoa.api.admin.response.GetAllUsersResponse
-import com.project.youthmoa.api.app.response.PageResponse
+import com.project.youthmoa.api.common.response.PageResponse
 import com.project.youthmoa.common.util.file.ExcelManager
 import com.project.youthmoa.common.util.file.ExcelManager.Default.setExcelDownload
 import com.project.youthmoa.common.util.file.UserListExcelRow
