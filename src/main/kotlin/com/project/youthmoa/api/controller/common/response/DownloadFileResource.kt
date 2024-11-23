@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.controller.util.response
+package com.project.youthmoa.api.controller.common.response
 
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType

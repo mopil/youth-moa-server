@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.controller.util.response
+package com.project.youthmoa.api.controller.common.response
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.data.domain.Page

@@ -1,8 +1,7 @@
-package com.project.youthmoa.api.controller.util
+package com.project.youthmoa.api.controller.common
 
-import com.project.youthmoa.api.controller.util.response.ErrorResponse
-import com.project.youthmoa.api.controller.util.response.FileMetaResponse
-import io.swagger.v3.oas.annotations.Operation
+import com.project.youthmoa.api.controller.common.response.ErrorResponse
+import com.project.youthmoa.api.controller.common.response.FileMetaResponse
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -11,8 +10,7 @@ import org.springframework.core.io.InputStreamResource
 import org.springframework.http.ResponseEntity
 import org.springframework.web.multipart.MultipartFile
 
-interface FileApiSpec {
-    @Operation(summary = "파일 업로드")
+interface FileApiDescription {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),
@@ -40,7 +38,6 @@ interface FileApiSpec {
     )
     fun uploadFile(file: MultipartFile): FileMetaResponse
 
-    @Operation(summary = "파일 다운로드(조회)")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),

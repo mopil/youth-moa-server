@@ -1,7 +1,7 @@
 package com.project.youthmoa.api.configuration
 
-import com.project.youthmoa.api.controller.util.response.ErrorResponse
-import com.project.youthmoa.api.controller.util.response.FieldErrorResponse
+import com.project.youthmoa.api.controller.common.response.ErrorResponse
+import com.project.youthmoa.api.controller.common.response.FieldErrorResponse
 import com.project.youthmoa.common.exception.*
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.slf4j.Logger

@@ -2,7 +2,9 @@ package com.project.youthmoa.api.controller.program.request
 
 import com.project.youthmoa.domain.repository.spec.GetAllProgramsSortType
 import io.swagger.v3.oas.annotations.Parameter
+import org.springdoc.core.annotations.ParameterObject
 
+@ParameterObject
 data class GetAllProgramsRequest(
     @field:Parameter(description = "필터: 청년센터 이름 (복수 가능) default=null", required = false)
     val youthCenterNames: List<String>? = null,

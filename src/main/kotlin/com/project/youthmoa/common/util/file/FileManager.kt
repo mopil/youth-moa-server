@@ -2,8 +2,8 @@ package com.project.youthmoa.common.util.file
 
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.ObjectMetadata
-import com.project.youthmoa.api.controller.util.response.DownloadFileResource
-import com.project.youthmoa.api.controller.util.response.FileMetaResponse
+import com.project.youthmoa.api.controller.common.response.DownloadFileResource
+import com.project.youthmoa.api.controller.common.response.FileMetaResponse
 import com.project.youthmoa.common.exception.InternalServerException
 import com.project.youthmoa.domain.model.FileMeta
 import com.project.youthmoa.domain.repository.FileMetaRepository

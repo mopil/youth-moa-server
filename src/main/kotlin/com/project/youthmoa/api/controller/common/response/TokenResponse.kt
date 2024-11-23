@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.controller.util.response
+package com.project.youthmoa.api.controller.common.response
 
 import java.time.Duration
 import java.time.LocalDateTime

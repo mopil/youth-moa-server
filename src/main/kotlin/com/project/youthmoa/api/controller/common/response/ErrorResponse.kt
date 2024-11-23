@@ -1,4 +1,4 @@
-package com.project.youthmoa.api.controller.util.response
+package com.project.youthmoa.api.controller.common.response
 
 import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.common.exception.FieldValidationError

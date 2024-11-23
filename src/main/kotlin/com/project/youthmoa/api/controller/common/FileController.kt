@@ -1,11 +1,12 @@
-package com.project.youthmoa.api.controller.util
+package com.project.youthmoa.api.controller.common
 
 import com.project.youthmoa.api.configuration.AuthenticationRequired
-import com.project.youthmoa.api.controller.util.response.FileMetaResponse
+import com.project.youthmoa.api.controller.common.response.FileMetaResponse
 import com.project.youthmoa.common.util.AuthManager
 import com.project.youthmoa.common.util.RateLimiter
 import com.project.youthmoa.common.util.file.FileManager
 import com.project.youthmoa.common.util.rateLimit
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.io.InputStreamResource
@@ -26,7 +27,8 @@ class FileController(
     private val fileManager: FileManager,
     @Qualifier("fileUploadRateLimiter") private val rateLimiter: RateLimiter,
     private val authManager: AuthManager,
-) : FileApiSpec {
+) : FileApiDescription {
+    @Operation(summary = "파일 업로드")
     @AuthenticationRequired
     @PostMapping(
         "/upload",
@@ -42,6 +44,7 @@ class FileController(
         }
     }
 
+    @Operation(summary = "파일 다운로드(조회)")
     @GetMapping("/{fileId}/download")
     override fun downloadFile(
         @PathVariable fileId: Long,

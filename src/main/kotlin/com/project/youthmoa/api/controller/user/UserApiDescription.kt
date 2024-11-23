@@ -1,22 +1,15 @@
 package com.project.youthmoa.api.controller.user
 
+import com.project.youthmoa.api.controller.common.response.ErrorResponse
 import com.project.youthmoa.api.controller.user.request.*
-import com.project.youthmoa.api.controller.user.response.FindEmailListResponse
-import com.project.youthmoa.api.controller.user.response.UserEmailDuplicationCheckResponse
 import com.project.youthmoa.api.controller.user.response.UserInfoResponse
 import com.project.youthmoa.api.controller.user.response.UserLoginResponse
-import com.project.youthmoa.api.controller.util.response.ErrorResponse
-import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import io.swagger.v3.oas.annotations.tags.Tag
-import org.springdoc.core.annotations.ParameterObject
 
-@Tag(name = "회원")
 interface UserApiDescription {
-    @Operation(summary = "회원가입")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),
@@ -29,7 +22,6 @@ interface UserApiDescription {
     )
     fun signUp(request: CreateUserRequest): UserLoginResponse
 
-    @Operation(summary = "로그인")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),
@@ -52,18 +44,6 @@ interface UserApiDescription {
     )
     fun login(request: UserLoginRequest): UserLoginResponse
 
-    @Operation(summary = "아이디(이메일) 중복 확인")
-    fun checkEmailDuplication(email: String): UserEmailDuplicationCheckResponse
-
-    @Operation(summary = "이름, 휴대폰 번호로 아이디(이메일) 찾기")
-    fun findAllEmailByNameAndPhone(
-        @ParameterObject request: FindEmailRequest,
-    ): FindEmailListResponse
-
-    @Operation(summary = "비밀번호 재설정 (이메일로 임시 비밀번호 발급)")
-    fun resetPassword(request: ResetPasswordRequest)
-
-    @Operation(summary = "사용자 정보 수정")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),
@@ -89,7 +69,6 @@ interface UserApiDescription {
         request: UpdateUserInfoRequest,
     ): UserInfoResponse
 
-    @Operation(summary = "회원탈퇴")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),

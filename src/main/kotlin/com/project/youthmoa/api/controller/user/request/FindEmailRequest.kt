@@ -2,7 +2,9 @@ package com.project.youthmoa.api.controller.user.request
 
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.validation.constraints.Pattern
+import org.springdoc.core.annotations.ParameterObject
 
+@ParameterObject
 data class FindEmailRequest(
     @field:Parameter(description = "유저 이름", required = true)
     val name: String,

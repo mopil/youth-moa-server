@@ -1,7 +1,7 @@
 package com.project.youthmoa.common.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.project.youthmoa.api.controller.util.response.ErrorResponse
+import com.project.youthmoa.api.controller.common.response.ErrorResponse
 import com.project.youthmoa.common.auth.AuthenticationUtils.permittedUris
 import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.common.util.TokenManager

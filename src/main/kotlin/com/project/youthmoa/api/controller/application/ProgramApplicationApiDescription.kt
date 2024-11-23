@@ -2,21 +2,13 @@ package com.project.youthmoa.api.controller.application
 
 import com.project.youthmoa.api.controller.application.request.CancelProgramApplicationRequest
 import com.project.youthmoa.api.controller.application.request.CreateProgramApplicationRequest
-import com.project.youthmoa.api.controller.application.response.GetUserApplicationHistoriesResponse
-import com.project.youthmoa.api.controller.util.response.ErrorResponse
-import io.swagger.v3.oas.annotations.Operation
+import com.project.youthmoa.api.controller.common.response.ErrorResponse
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import io.swagger.v3.oas.annotations.tags.Tag
 
-@Tag(name = "프로그램 신청서")
 interface ProgramApplicationApiDescription {
-    @Operation(summary = "인증된 사용자의 프로그램 신청 이력 조회 (카운트 조회 포함)")
-    fun getUserProgramHistories(): GetUserApplicationHistoriesResponse
-
-    @Operation(summary = "프로그램 참가 신청")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),
@@ -39,7 +31,6 @@ interface ProgramApplicationApiDescription {
     )
     fun createApplication(request: CreateProgramApplicationRequest): Long
 
-    @Operation(summary = "프로그램 신청 취소")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "OK"),
