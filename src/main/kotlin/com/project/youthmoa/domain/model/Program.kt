@@ -1,6 +1,6 @@
 package com.project.youthmoa.domain.model
 
-import com.project.youthmoa.api.admin.request.CreateOrUpdateProgramRequest
+import com.project.youthmoa.api.controller.program.request.CreateOrUpdateProgramRequest
 import com.project.youthmoa.domain.model.converter.CommaToStringListConverter
 import com.project.youthmoa.domain.type.ProgramStatus
 import jakarta.persistence.*

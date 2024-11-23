@@ -1,7 +1,7 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.app.request.UpdateUserInfoRequest
-import com.project.youthmoa.api.common.response.UserResponse
+import com.project.youthmoa.api.controller.user.request.UpdateUserInfoRequest
+import com.project.youthmoa.api.controller.user.response.UserInfoResponse
 import com.project.youthmoa.common.util.SendEmail
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.findByEmailOrThrow
@@ -14,7 +14,7 @@ interface UserInfoService {
     fun updateUserInfo(
         userId: Long,
         request: UpdateUserInfoRequest,
-    ): UserResponse
+    ): UserInfoResponse
 
     fun resetPassword(email: String)
 
@@ -32,7 +32,7 @@ class UserInfoServiceImpl(
     override fun updateUserInfo(
         userId: Long,
         request: UpdateUserInfoRequest,
-    ): UserResponse {
+    ): UserInfoResponse {
         val user = userRepository.findByIdOrThrow(userId)
 
         user.apply {
@@ -42,7 +42,7 @@ class UserInfoServiceImpl(
             address = request.newAddress
             phone = request.newPhone
         }
-        return UserResponse.from(user)
+        return UserInfoResponse.from(user)
     }
 
     @Transactional

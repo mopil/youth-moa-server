@@ -1,6 +1,6 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.app.request.CancelProgramApplicationRequest
+import com.project.youthmoa.api.controller.application.request.CancelProgramApplicationRequest
 import com.project.youthmoa.domain.model.ProgramApplication
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow

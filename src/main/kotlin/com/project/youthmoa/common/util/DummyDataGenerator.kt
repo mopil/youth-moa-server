@@ -1,7 +1,7 @@
 package com.project.youthmoa.common.util
 
-import com.project.youthmoa.api.app.request.CreateProgramApplicationRequest
-import com.project.youthmoa.api.app.request.QuestionAnswer
+import com.project.youthmoa.api.controller.application.request.CreateProgramApplicationRequest
+import com.project.youthmoa.api.controller.application.request.QuestionAnswer
 import com.project.youthmoa.domain.model.*
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.UserRepository

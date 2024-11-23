@@ -1,6 +1,6 @@
 package com.project.youthmoa.domain.repository.spec
 
-import com.project.youthmoa.api.admin.request.GetAllUsersRequest
+import com.project.youthmoa.api.controller.user.request.GetAllUsersRequest
 import com.project.youthmoa.domain.type.Gender
 import com.project.youthmoa.domain.type.UserRole
 import org.springframework.data.domain.PageRequest

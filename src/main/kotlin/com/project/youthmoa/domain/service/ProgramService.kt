@@ -1,6 +1,6 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.admin.request.CreateOrUpdateProgramRequest
+import com.project.youthmoa.api.controller.program.request.CreateOrUpdateProgramRequest
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository

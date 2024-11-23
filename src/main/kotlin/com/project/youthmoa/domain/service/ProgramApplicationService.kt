@@ -1,6 +1,6 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.app.response.GetUserApplicationHistoriesResponse
+import com.project.youthmoa.api.controller.application.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
