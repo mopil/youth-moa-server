@@ -44,7 +44,7 @@ data class ProgramDetailResponse(
                 location = program.location,
                 currentAppliedUserCount = program.currentAppliedUserCount,
                 maxUserCount = program.maxUserCount,
-                contactNumber = program.contactNumber,
+                contactNumber = program.contact,
                 attachmentFileIds = program.attachmentFileIds,
                 lectures = program.lectures,
                 freeQuestions = program.freeQuestions.map { it.question },

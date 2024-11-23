@@ -8,13 +8,28 @@ import com.project.youthmoa.domain.repository.spec.GetAllProgramsSpec
 import com.project.youthmoa.domain.type.ProgramStatus
 import org.springframework.data.domain.Page
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
-interface ProgramRepository : JpaRepository<Program, Long>, ProgramJdslRepository
+interface ProgramRepository : JpaRepository<Program, Long>, ProgramJdslRepository {
+    @Query(
+        """
+        SELECT p
+        FROM Program p
+        LEFT JOIN FETCH p.freeQuestions
+        WHERE p.id = :id
+    """,
+    )
+    fun findFetchWithQuestions(id: Long): Program?
+}
 
 fun ProgramRepository.findByIdOrThrow(id: Long): Program {
     return findByIdOrNull(id) ?: throw NoSuchElementException()
+}
+
+fun ProgramRepository.findFetchWithQuestionsOrThrow(id: Long): Program {
+    return findFetchWithQuestions(id) ?: throw NoSuchElementException("프로그램이 존재하지 않습니다.")
 }
 
 interface ProgramJdslRepository {

@@ -3,7 +3,7 @@ package com.project.youthmoa.api.common
 import com.project.youthmoa.api.common.response.FileMetaResponse
 import com.project.youthmoa.api.common.spec.FileApiSpec
 import com.project.youthmoa.api.configuration.AuthenticationRequired
-import com.project.youthmoa.common.auth.AuthenticationUtils
+import com.project.youthmoa.common.util.AuthManager
 import com.project.youthmoa.common.util.FileManager
 import com.project.youthmoa.common.util.RateLimiter
 import com.project.youthmoa.common.util.rateLimit
@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile
 class FileController(
     private val fileManager: FileManager,
     @Qualifier("fileUploadRateLimiter") private val rateLimiter: RateLimiter,
+    private val authManager: AuthManager,
 ) : FileApiSpec {
     @AuthenticationRequired
     @PostMapping(
@@ -36,7 +37,7 @@ class FileController(
     override fun uploadFile(
         @RequestPart file: MultipartFile,
     ): FileMetaResponse {
-        val loginUser = AuthenticationUtils.getCurrentLoginUser()
+        val loginUser = authManager.getCurrentLoginUser()
         return rateLimit(rateLimiter, loginUser.id) {
             fileManager.uploadFile(loginUser.id, file)
         }

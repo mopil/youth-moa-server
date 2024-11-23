@@ -4,7 +4,9 @@ import com.project.youthmoa.domain.model.*
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository
+import com.project.youthmoa.domain.repository.findByIdOrThrow
 import com.project.youthmoa.domain.type.Gender
+import com.project.youthmoa.domain.type.ProgramStatus
 import com.project.youthmoa.domain.type.UserRole
 import jakarta.annotation.PostConstruct
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -67,9 +69,26 @@ class DummyDataGenerator(
                 programEndDate = LocalDate.now().plusDays(Random.nextLong(0, 7)),
                 lectures = listOf("강좌1", "강좌2"),
                 youthCenter = youthCenters.random(),
+                status = ProgramStatus.진행예정,
             ).also {
                 programRepository.save(it)
             }
+        }
+
+        programRepository.findByIdOrThrow(1).apply {
+            freeQuestions =
+                mutableListOf(
+                    ProgramFreeQuestion(
+                        question = "질문1",
+                        program = this,
+                    ),
+                    ProgramFreeQuestion(
+                        question = "질문2",
+                        program = this,
+                    ),
+                )
+        }.also {
+            programRepository.save(it)
         }
     }
 }

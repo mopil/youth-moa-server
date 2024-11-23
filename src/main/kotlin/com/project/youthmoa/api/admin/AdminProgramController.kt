@@ -1,6 +1,6 @@
 package com.project.youthmoa.api.admin
 
-import com.project.youthmoa.api.admin.request.CreateProgramRequest
+import com.project.youthmoa.api.admin.request.CreateOrUpdateProgramRequest
 import com.project.youthmoa.domain.service.ProgramService
 import org.springframework.web.bind.annotation.*
 
@@ -11,15 +11,15 @@ class AdminProgramController(
 ) {
     @PostMapping
     fun createProgram(
-        @RequestBody request: CreateProgramRequest,
-    ): Long {
-        return programService.createProgram(request)
+        @RequestBody request: CreateOrUpdateProgramRequest,
+    ): List<Long> {
+        return programService.createPrograms(request)
     }
 
     @PutMapping("/{programId}")
     fun updateProgram(
         @PathVariable programId: Long,
-        @RequestBody request: CreateProgramRequest,
+        @RequestBody request: CreateOrUpdateProgramRequest,
     ) {
         programService.updateProgram(programId, request)
     }

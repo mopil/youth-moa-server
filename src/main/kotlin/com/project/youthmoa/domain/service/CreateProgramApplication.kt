@@ -1,15 +1,16 @@
 package com.project.youthmoa.domain.service
 
 import com.project.youthmoa.api.app.request.CreateProgramApplicationRequest
-import com.project.youthmoa.common.util.FileManager
+import com.project.youthmoa.api.app.request.QuestionAnswer
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.model.ProgramApplication
-import com.project.youthmoa.domain.model.User
+import com.project.youthmoa.domain.model.ProgramApplicationAnswer
 import com.project.youthmoa.domain.repository.*
 import com.project.youthmoa.domain.type.ProgramApplicationStatus
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 fun interface CreateProgramApplication {
     operator fun invoke(
@@ -19,82 +20,79 @@ fun interface CreateProgramApplication {
 
     @Component
     class Default(
-        private val fileManager: FileManager,
         private val userRepository: UserRepository,
         private val programRepository: ProgramRepository,
         private val programApplicationRepository: ProgramApplicationRepository,
     ) : CreateProgramApplication {
+        val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
         @Transactional
         override fun invoke(
             userId: Long,
             request: CreateProgramApplicationRequest,
         ): Long {
-            checkBeforeApplicationStatusIfExist(request.programId, userId)
-            fileManager.checkExistence(request.attachmentFileIds)
+            val program = programRepository.findFetchWithQuestionsOrThrow(request.programId)
+            logger.info("신청서 작성 시작 = programId:${program.id}, userId:$userId")
 
-            val program = programRepository.findByIdOrThrow(request.programId)
+            checkBeforeApply(program.id, userId)
+
             val user = userRepository.findByIdOrThrow(userId)
 
             val application =
-                if (program.isNeedAdminApprove.not()) {
-                    program.addAppliedUserCount()
-                    createAutoApprovedApplication(program, user, request)
-                } else {
-                    createApproveWaitingApplication(program, user, request)
+                ProgramApplication(
+                    program = program,
+                    attachmentFileIds = request.attachmentFileIds,
+                    status = ProgramApplicationStatus.대기,
+                    applier = user,
+                ).also {
+                    programApplicationRepository.save(it)
                 }
+
+            if (program.freeQuestions.isNotEmpty()) {
+                addAnswers(request.questionAnswers, program, application)
+            }
+
+            program.addApplication(application)
 
             return application.id
         }
 
-        private fun checkBeforeApplicationStatusIfExist(
+        private fun checkBeforeApply(
             programId: Long,
-            loginUserId: Long,
+            userId: Long,
         ) {
-            val beforeApplication =
-                programApplicationRepository.findByProgramIdAndApplierId(programId, loginUserId)
-                    ?: return
-            if (beforeApplication.isApproved()) {
-                throw IllegalStateException("이미 승인 완료 되었습니다.")
+            programApplicationRepository.findByProgramIdAndApplierId(programId, userId)?.let {
+                if (it.isApproved()) {
+                    throw IllegalStateException("이미 승인 완료 되었습니다.")
+                }
+                if (it.isWaiting()) {
+                    throw IllegalStateException("이미 신청하여 승인 대기중입니다.")
+                }
             }
-            if (beforeApplication.isWaiting()) {
-                throw IllegalStateException("이미 신청하여 승인 대기중입니다.")
-            }
+            logger.info("이전 신청서 상태 체크 완료 (이상없음)")
         }
 
-        private fun createApproveWaitingApplication(
+        private fun addAnswers(
+            userAnswers: List<QuestionAnswer>,
             program: Program,
-            loginUser: User,
-            request: CreateProgramApplicationRequest,
-        ): ProgramApplication {
-            return ProgramApplication(
-                program = program,
-                applierName = request.applierName,
-                applierPhone = request.applierPhone,
-                applierEmail = request.applierEmail,
-                applierAddress = request.applierAddress,
-                attachmentFileIds = request.attachmentFileIds,
-                status = ProgramApplicationStatus.대기,
-                applier = loginUser,
-            ).let(programApplicationRepository::save)
-        }
+            application: ProgramApplication,
+        ) {
+            val userAnswerQuestionIds = userAnswers.map { it.questionId }
+            if (userAnswerQuestionIds.any { it !in program.freeQuestions.map { it.id } }) {
+                throw IllegalArgumentException("질문이 존재하지 않습니다.")
+            }
 
-        private fun createAutoApprovedApplication(
-            program: Program,
-            loginUser: User,
-            request: CreateProgramApplicationRequest,
-        ): ProgramApplication {
-            return ProgramApplication(
-                program = program,
-                applierName = request.applierName,
-                applierPhone = request.applierPhone,
-                applierEmail = request.applierEmail,
-                applierAddress = request.applierAddress,
-                attachmentFileIds = request.attachmentFileIds,
-                status = ProgramApplicationStatus.승인,
-                adminComment = "자동 승인",
-                adminActionDateTime = LocalDateTime.now(),
-                applier = loginUser,
-            ).let(programApplicationRepository::save)
+            val questionMap = program.freeQuestions.associateBy { it.id }
+            val answers =
+                userAnswers.map {
+                    ProgramApplicationAnswer(
+                        question = questionMap[it.questionId] ?: throw IllegalArgumentException("질문이 존재하지 않습니다."),
+                        answer = it.content,
+                        programApplication = application,
+                    )
+                }
+            application.addAnswers(answers)
+            logger.info("질문 존재하여 답변 추가 = $userAnswers")
         }
     }
 }

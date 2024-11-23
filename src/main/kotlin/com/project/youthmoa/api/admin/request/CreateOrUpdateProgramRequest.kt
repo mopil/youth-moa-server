@@ -2,7 +2,7 @@ package com.project.youthmoa.api.admin.request
 
 import java.time.LocalDate
 
-data class CreateProgramRequest(
+data class CreateOrUpdateProgramRequest(
     val programImageFileId: Long?,
     val title: String,
     val description: String?,
@@ -12,14 +12,13 @@ data class CreateProgramRequest(
     val programEndDate: LocalDate,
     val location: String?,
     val maxUserCount: Int,
-    val contactNumber: String?,
+    val contact: String?,
     val attachmentFileIds: List<Long> = emptyList(),
     val detailContent: String?,
-    val youthCenterId: Long,
-    val isNeedApprove: Boolean,
+    val youthCenterIds: List<Long>,
     val lectures: List<String>,
     val isAttachmentRequired: Boolean,
-    // TODO : 질문이랑 약관 제공여부는 제외?
+    val freeQuestions: List<String> = emptyList(),
 ) {
     init {
         require(attachmentFileIds.size <= 5) {

@@ -1,6 +1,6 @@
 package com.project.youthmoa.domain.service
 
-import com.project.youthmoa.api.admin.request.CreateProgramRequest
+import com.project.youthmoa.api.admin.request.CreateOrUpdateProgramRequest
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 interface ProgramService {
-    fun createProgram(request: CreateProgramRequest): Long
+    fun createPrograms(request: CreateOrUpdateProgramRequest): List<Long>
 
     fun updateProgram(
         programId: Long,
-        request: CreateProgramRequest,
+        request: CreateOrUpdateProgramRequest,
     ): Long
 
     fun deleteProgram(programId: Long)
@@ -26,19 +26,23 @@ interface ProgramService {
         private val youthCenterRepository: YouthCenterRepository,
         private val programRepository: ProgramRepository,
     ) : ProgramService {
-        override fun createProgram(request: CreateProgramRequest): Long {
-            val youthCenter = youthCenterRepository.findByIdOrThrow(request.youthCenterId)
+        override fun createPrograms(request: CreateOrUpdateProgramRequest): List<Long> {
+            val youthCenters = youthCenterRepository.findAllById(request.youthCenterIds)
 
-            val program = programRepository.save(Program.ofNew(request, youthCenter))
+            val programs =
+                youthCenters.map {
+                    programRepository.save(Program.ofNew(request, it))
+                }
 
-            return program.id
+            return programs.map { it.id }
         }
 
         override fun updateProgram(
             programId: Long,
-            request: CreateProgramRequest,
+            request: CreateOrUpdateProgramRequest,
         ): Long {
-            TODO("Not yet implemented")
+            // TODO: Implement updateProgram
+            return 0
         }
 
         override fun deleteProgram(programId: Long) {
