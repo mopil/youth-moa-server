@@ -8,6 +8,9 @@ import com.project.youthmoa.api.controller.application.response.GetProgramApplic
 import com.project.youthmoa.api.controller.application.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.api.controller.common.response.PageResponse
 import com.project.youthmoa.common.util.AuthManager
+import com.project.youthmoa.common.util.file.ApplicationListExcelRow
+import com.project.youthmoa.common.util.file.ExcelManager
+import com.project.youthmoa.common.util.file.ExcelManager.Default.setExcelDownload
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import com.project.youthmoa.domain.service.CancelProgramApplication
@@ -15,7 +18,9 @@ import com.project.youthmoa.domain.service.CreateProgramApplication
 import com.project.youthmoa.domain.service.ProgramApplicationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
+import org.joda.time.LocalDate
 import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.*
 
@@ -28,6 +33,7 @@ class ProgramApplicationController(
     private val cancelProgramApplication: CancelProgramApplication,
     private val authManager: AuthManager,
 ) : ProgramApplicationApiDescription {
+    // TODO : 응답 통일해야함;;
     @Operation(summary = "인증된 사용자의 프로그램 신청 이력 조회 (카운트 조회 포함)")
     @AuthenticationRequired
     @GetMapping("/api/applications")
@@ -76,5 +82,21 @@ class ProgramApplicationController(
         return programApplicationRepository.findAllByProgramId(programId, PageRequest.of(page, size))
             .map { GetAppliedProgramApplicationResponse.from(it) }
             .let { PageResponse.from(it) }
+    }
+
+    @Operation(summary = "프로그램 신청서 목록(현황) 엑셀 다운로드")
+    @GetMapping("/admin/applications/download/excel")
+    fun downloadApplicationsExcel(
+        @RequestParam programId: Long,
+        response: HttpServletResponse,
+    ) {
+        val applications = programApplicationRepository.findAllByProgramId(programId)
+        val program = applications.first().program
+        val workbook =
+            ExcelManager.Default.createExcelWorkbook(
+                sheetName = "[${program.title}] 신청서 목록",
+                dataList = applications.map { ApplicationListExcelRow.from(it) },
+            )
+        response.setExcelDownload("program_${programId}_application_list(${LocalDate.now()}).xlsx", workbook)
     }
 }
