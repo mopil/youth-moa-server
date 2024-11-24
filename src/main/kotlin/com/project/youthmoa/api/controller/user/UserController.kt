@@ -14,8 +14,8 @@ import com.project.youthmoa.common.util.file.ExcelManager.Default.setExcelDownlo
 import com.project.youthmoa.common.util.file.UserListExcelRow
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.spec.GetAllUsersSpec
-import com.project.youthmoa.domain.service.UserInfoService
 import com.project.youthmoa.domain.service.UserLoginService
+import com.project.youthmoa.domain.service.UserWriteService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
@@ -27,7 +27,7 @@ import java.time.LocalDate
 @RestController
 class UserController(
     private val userLoginService: UserLoginService,
-    private val userInfoService: UserInfoService,
+    private val userWriteService: UserWriteService,
     private val userRepository: UserRepository,
     private val authManager: AuthManager,
 ) : UserApiDescription {
@@ -80,7 +80,7 @@ class UserController(
     fun resetPassword(
         @Valid @RequestBody request: ResetPasswordRequest,
     ) {
-        userInfoService.resetPassword(request.email)
+        userWriteService.resetPassword(request.email)
     }
 
     @Operation(summary = "사용자 정보 수정")
@@ -94,7 +94,7 @@ class UserController(
         @Valid @RequestBody request: UpdateUserInfoRequest,
     ): UserInfoResponse {
         authManager.checkIsSelf(userId)
-        return userInfoService.updateUserInfo(userId, request)
+        return userWriteService.updateUserInfo(userId, request)
     }
 
     @Operation(summary = "회원탈퇴")
@@ -104,7 +104,7 @@ class UserController(
         @PathVariable userId: Long,
     ) {
         authManager.checkIsSelf(userId)
-        userInfoService.withdraw(userId)
+        userWriteService.withdraw(userId)
     }
 
     @Operation(summary = "사용자 목록 조회")

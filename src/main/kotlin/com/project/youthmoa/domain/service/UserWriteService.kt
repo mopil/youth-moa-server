@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-interface UserInfoService {
+interface UserWriteService {
     fun updateUserInfo(
         userId: Long,
         request: UpdateUserInfoRequest,
@@ -23,11 +23,11 @@ interface UserInfoService {
 
 @Service
 @Transactional(readOnly = true)
-class UserInfoServiceImpl(
+class UserWriteServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val sendEmail: SendEmail,
-) : UserInfoService {
+) : UserWriteService {
     @Transactional
     override fun updateUserInfo(
         userId: Long,

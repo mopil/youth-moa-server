@@ -1,5 +1,6 @@
 package com.project.youthmoa.domain.model
 
+import com.project.youthmoa.common.exception.ForbiddenException
 import com.project.youthmoa.domain.type.Gender
 import com.project.youthmoa.domain.type.UserRole
 import jakarta.persistence.*
@@ -21,4 +22,10 @@ class User(
     @OneToMany(mappedBy = "applier", cascade = [CascadeType.ALL], orphanRemoval = true)
     val applications: List<ProgramApplication> = emptyList(),
     var lastLoginedAt: LocalDateTime = LocalDateTime.now(),
-) : BaseEntity()
+) : BaseEntity() {
+    fun checkIsAdmin() {
+        if (role != UserRole.ADMIN) {
+            throw ForbiddenException("관리자만 접근 가능합니다.")
+        }
+    }
+}

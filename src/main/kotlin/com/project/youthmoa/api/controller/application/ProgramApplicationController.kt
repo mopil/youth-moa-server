@@ -4,17 +4,18 @@ import com.project.youthmoa.api.configuration.AuthenticationRequired
 import com.project.youthmoa.api.controller.application.request.AdminUpdateApplicationRequest
 import com.project.youthmoa.api.controller.application.request.ApplyApplicationRequest
 import com.project.youthmoa.api.controller.application.request.CancelProgramApplicationRequest
+import com.project.youthmoa.api.controller.application.response.GetAllApplicationsByUserResponse
 import com.project.youthmoa.api.controller.application.response.GetAppliedProgramApplicationResponse
 import com.project.youthmoa.api.controller.application.response.GetProgramApplicationResponse
-import com.project.youthmoa.api.controller.application.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.api.controller.common.response.PageResponse
+import com.project.youthmoa.api.controller.program.response.ProgramCountResponse
 import com.project.youthmoa.common.util.AuthManager
 import com.project.youthmoa.common.util.file.ApplicationListExcelRow
 import com.project.youthmoa.common.util.file.ExcelManager
 import com.project.youthmoa.common.util.file.ExcelManager.Default.setExcelDownload
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
-import com.project.youthmoa.domain.service.ProgramApplicationService
+import com.project.youthmoa.domain.service.ProgramApplicationWriteService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
@@ -26,17 +27,22 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "프로그램 신청서")
 @RestController
 class ProgramApplicationController(
-    private val programApplicationService: ProgramApplicationService,
+    private val programApplicationWriteService: ProgramApplicationWriteService,
     private val programApplicationRepository: ProgramApplicationRepository,
     private val authManager: AuthManager,
 ) : ProgramApplicationApiDescription {
-    // TODO : 응답 통일해야함;;
     @Operation(summary = "인증된 사용자의 프로그램 신청 이력 조회 (카운트 조회 포함)")
     @AuthenticationRequired
-    @GetMapping("/api/applications")
-    fun getUserProgramHistories(): GetUserApplicationHistoriesResponse {
+    @GetMapping("/api/applications/by-me")
+    fun getAllApplicationsByUser(): GetAllApplicationsByUserResponse {
         val loginUser = authManager.getCurrentLoginUser()
-        return programApplicationService.getUserApplicationHistories(loginUser.id)
+        val applications = programApplicationRepository.findAllByApplierId(loginUser.id)
+        val programs = applications.map { it.program }
+
+        return GetAllApplicationsByUserResponse(
+            ProgramCountResponse.from(programs),
+            applications = applications.map { GetProgramApplicationResponse.from(it) },
+        )
     }
 
     @Operation(summary = "프로그램 참가 신청")
@@ -46,7 +52,7 @@ class ProgramApplicationController(
         @Valid @RequestBody request: ApplyApplicationRequest,
     ): Long {
         val loginUser = authManager.getCurrentLoginUser()
-        return programApplicationService.applyApplication(
+        return programApplicationWriteService.applyApplication(
             userId = loginUser.id,
             programId = request.programId,
             attachmentFileIds = request.attachmentFileIds,
@@ -62,7 +68,7 @@ class ProgramApplicationController(
         @Valid @RequestBody request: CancelProgramApplicationRequest,
     ) {
         val loginUser = authManager.getCurrentLoginUser()
-        programApplicationService.cancelApplicationByUser(
+        programApplicationWriteService.cancelApplicationByUser(
             userId = loginUser.id,
             applicationId = applicationId,
             cancelReason = request.cancelReason,
@@ -78,17 +84,17 @@ class ProgramApplicationController(
         return GetProgramApplicationResponse.from(application)
     }
 
-    @Operation(summary = "프로그램 신청서 상태 변경")
     @AuthenticationRequired
+    @Operation(summary = "프로그램 신청서 상태 변경")
     @PutMapping("/admin/applications/{applicationId}")
     fun updateApplicationStatus(
         @PathVariable applicationId: Long,
         @Valid @RequestBody request: AdminUpdateApplicationRequest,
     ) {
-        val loginUser = authManager.getCurrentLoginUser()
-        programApplicationService.updateApplicationByAdmin(
+        val loginAdmin = authManager.getCurrentLoginAdmin()
+        programApplicationWriteService.updateApplicationByAdmin(
             applicationId = applicationId,
-            adminUserId = loginUser.id,
+            adminUserId = loginAdmin.id,
             adminComment = request.adminComment,
             applicationStatus = request.applicationStatus,
         )

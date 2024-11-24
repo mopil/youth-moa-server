@@ -21,6 +21,7 @@ interface ProgramApplicationRepository :
         applierId: Long,
     ): ProgramApplication?
 
+    @Query("select p from ProgramApplication p join fetch p.program where p.applier.id = :applierId")
     fun findAllByApplierId(applierId: Long): List<ProgramApplication>
 
     @Query("select p from ProgramApplication p join fetch p.applier where p.program.id = :programId")

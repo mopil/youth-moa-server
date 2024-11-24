@@ -22,6 +22,8 @@ interface ProgramRepository : JpaRepository<Program, Long>, ProgramJdslRepositor
     """,
     )
     fun findFetchWithQuestions(id: Long): Program?
+
+    fun findAllByAdminUserId(adminUserId: Long): List<Program>
 }
 
 fun ProgramRepository.findByIdOrThrow(id: Long): Program {

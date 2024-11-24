@@ -34,6 +34,7 @@ class Program(
     var youthCenter: YouthCenter,
     @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
     var applications: MutableList<ProgramApplication> = arrayListOf(),
+    val adminUserId: Long,
 ) : BaseEntity() {
     fun isEnd() = status == ProgramStatus.마감
 
@@ -66,6 +67,7 @@ class Program(
 
     companion object {
         fun ofNew(
+            adminUserId: Long,
             request: CreateOrUpdateProgramRequest,
             youthCenter: YouthCenter,
         ): Program {
@@ -87,6 +89,7 @@ class Program(
                     lectures = request.lectures,
                     status = status,
                     youthCenter = youthCenter,
+                    adminUserId = adminUserId,
                 )
             request.freeQuestions.map {
                 ProgramFreeQuestion(question = it, program = program)

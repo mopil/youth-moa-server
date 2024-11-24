@@ -1,7 +1,6 @@
 package com.project.youthmoa.domain.service
 
 import com.project.youthmoa.api.controller.application.request.QuestionAnswer
-import com.project.youthmoa.api.controller.application.response.GetUserApplicationHistoriesResponse
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.model.ProgramApplication
 import com.project.youthmoa.domain.model.ProgramApplicationAnswer
@@ -13,15 +12,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-interface ProgramApplicationService {
+interface ProgramApplicationWriteService {
     fun applyApplication(
         userId: Long,
         programId: Long,
         attachmentFileIds: List<Long> = emptyList(),
         questionAnswers: List<QuestionAnswer> = emptyList(),
     ): Long
-
-    fun getUserApplicationHistories(userId: Long): GetUserApplicationHistoriesResponse
 
     fun updateApplicationByAdmin(
         applicationId: Long,
@@ -38,12 +35,11 @@ interface ProgramApplicationService {
 }
 
 @Service
-@Transactional(readOnly = true)
-class ProgramApplicationServiceImpl(
+class ProgramApplicationWriteServiceImpl(
     private val userRepository: UserRepository,
     private val programRepository: ProgramRepository,
     private val programApplicationRepository: ProgramApplicationRepository,
-) : ProgramApplicationService {
+) : ProgramApplicationWriteService {
     val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     /**
@@ -80,28 +76,6 @@ class ProgramApplicationServiceImpl(
         program.addApplication(application)
 
         return application.id
-    }
-
-    /**
-     * 해당 사용자의 프로그램 신청 이력 조회
-     */
-    override fun getUserApplicationHistories(userId: Long): GetUserApplicationHistoriesResponse {
-        val applicationHistories = programApplicationRepository.findAllByApplierId(userId)
-
-        val inProgressProgramCount =
-            applicationHistories.count {
-                it.program.isInProgress() && (it.isWaiting() || it.isApproved())
-            }
-        val endProgramCount =
-            applicationHistories.count {
-                it.program.isEnd() && it.isApproved()
-            }
-
-        return GetUserApplicationHistoriesResponse.of(
-            inProgressProgramCount = inProgressProgramCount,
-            endProgramCount = endProgramCount,
-            applicationHistories = applicationHistories,
-        )
     }
 
     /**

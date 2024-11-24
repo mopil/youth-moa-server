@@ -14,6 +14,15 @@ interface AuthManager {
     fun getCurrentLoginUser(): User
 
     /**
+     * 현재 로그인한 관리자 정보 반환
+     */
+    fun getCurrentLoginAdmin(): User {
+        val loginUser = getCurrentLoginUser()
+        loginUser.checkIsAdmin()
+        return loginUser
+    }
+
+    /**
      * 현재 로그인한 사용자가 userId와 일치하는지 확인
      */
     fun checkIsSelf(userId: Long)

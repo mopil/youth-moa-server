@@ -7,7 +7,7 @@ import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
-import com.project.youthmoa.domain.service.ProgramApplicationService
+import com.project.youthmoa.domain.service.ProgramApplicationWriteService
 import com.project.youthmoa.domain.type.Gender
 import com.project.youthmoa.domain.type.ProgramStatus
 import com.project.youthmoa.domain.type.UserRole
@@ -27,7 +27,7 @@ class DummyDataGenerator(
     private val programRepository: ProgramRepository,
     private val youthCenterRepository: YouthCenterRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val programApplicationService: ProgramApplicationService,
+    private val programApplicationWriteService: ProgramApplicationWriteService,
 ) {
     @PostConstruct
     @Transactional
@@ -74,7 +74,8 @@ class DummyDataGenerator(
                 programEndAt = LocalDateTime.now().plusDays(Random.nextLong(0, 7)),
                 lectures = listOf("강좌1", "강좌2"),
                 youthCenter = youthCenters.random(),
-                status = ProgramStatus.진행예정,
+                status = ProgramStatus.entries.toTypedArray().random(),
+                adminUserId = SUPER_ADMIN_USER_ID,
             ).also {
                 programRepository.save(it)
             }
@@ -111,7 +112,7 @@ class DummyDataGenerator(
                         ),
                     ),
             )
-        programApplicationService.applyApplication(
+        programApplicationWriteService.applyApplication(
             SUPER_ADMIN_USER_ID,
             request.programId,
             request.attachmentFileIds,
@@ -122,7 +123,7 @@ class DummyDataGenerator(
             ApplyApplicationRequest(
                 programId = 2,
             )
-        programApplicationService.applyApplication(
+        programApplicationWriteService.applyApplication(
             SUPER_ADMIN_USER_ID,
             request2.programId,
             request2.attachmentFileIds,

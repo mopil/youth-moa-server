@@ -1,6 +1,7 @@
 package com.project.youthmoa.domain.service
 
 import com.project.youthmoa.api.controller.program.request.CreateOrUpdateProgramRequest
+import com.project.youthmoa.common.exception.ForbiddenException
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository
@@ -10,28 +11,38 @@ import com.project.youthmoa.domain.type.ProgramStatus
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-interface ProgramService {
-    fun createPrograms(request: CreateOrUpdateProgramRequest): List<Long>
+interface ProgramWriteService {
+    fun createPrograms(
+        adminUserId: Long,
+        request: CreateOrUpdateProgramRequest,
+    ): List<Long>
 
     fun updateProgram(
         programId: Long,
+        adminUserId: Long,
         request: CreateOrUpdateProgramRequest,
     ): Long
 
-    fun deleteProgram(programId: Long)
+    fun deleteProgram(
+        programId: Long,
+        adminUserId: Long,
+    )
 
     @Component
     @Transactional
     class Default(
         private val youthCenterRepository: YouthCenterRepository,
         private val programRepository: ProgramRepository,
-    ) : ProgramService {
-        override fun createPrograms(request: CreateOrUpdateProgramRequest): List<Long> {
+    ) : ProgramWriteService {
+        override fun createPrograms(
+            adminUserId: Long,
+            request: CreateOrUpdateProgramRequest,
+        ): List<Long> {
             val youthCenters = youthCenterRepository.findAllById(request.youthCenterIds)
 
             val programs =
                 youthCenters.map {
-                    programRepository.save(Program.ofNew(request, it))
+                    programRepository.save(Program.ofNew(adminUserId, request, it))
                 }
 
             return programs.map { it.id }
@@ -39,14 +50,21 @@ interface ProgramService {
 
         override fun updateProgram(
             programId: Long,
+            adminUserId: Long,
             request: CreateOrUpdateProgramRequest,
         ): Long {
             // TODO: Implement updateProgram
             return 0
         }
 
-        override fun deleteProgram(programId: Long) {
+        override fun deleteProgram(
+            programId: Long,
+            adminUserId: Long,
+        ) {
             val program = programRepository.findByIdOrThrow(programId)
+            if (program.adminUserId != adminUserId) {
+                throw ForbiddenException("본인이 등록한 프로그램만 삭제 가능합니다.")
+            }
             program.apply {
                 isDeleted = true
                 status = ProgramStatus.종료
