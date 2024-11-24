@@ -6,3 +6,8 @@ enum class ProgramApplicationStatus {
     취소,
     승인,
 }
+
+enum class ProgramApplicationAdminChangeableStatus {
+    반려,
+    승인,
+}

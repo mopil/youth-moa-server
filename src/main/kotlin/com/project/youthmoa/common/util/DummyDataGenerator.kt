@@ -1,13 +1,13 @@
 package com.project.youthmoa.common.util
 
-import com.project.youthmoa.api.controller.application.request.CreateProgramApplicationRequest
+import com.project.youthmoa.api.controller.application.request.ApplyApplicationRequest
 import com.project.youthmoa.api.controller.application.request.QuestionAnswer
 import com.project.youthmoa.domain.model.*
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.UserRepository
 import com.project.youthmoa.domain.repository.YouthCenterRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
-import com.project.youthmoa.domain.service.CreateProgramApplication
+import com.project.youthmoa.domain.service.ProgramApplicationService
 import com.project.youthmoa.domain.type.Gender
 import com.project.youthmoa.domain.type.ProgramStatus
 import com.project.youthmoa.domain.type.UserRole
@@ -27,7 +27,7 @@ class DummyDataGenerator(
     private val programRepository: ProgramRepository,
     private val youthCenterRepository: YouthCenterRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val createProgramApplication: CreateProgramApplication,
+    private val programApplicationService: ProgramApplicationService,
 ) {
     @PostConstruct
     @Transactional
@@ -97,7 +97,7 @@ class DummyDataGenerator(
         }
 
         val request =
-            CreateProgramApplicationRequest(
+            ApplyApplicationRequest(
                 programId = 1,
                 questionAnswers =
                     listOf(
@@ -111,12 +111,22 @@ class DummyDataGenerator(
                         ),
                     ),
             )
-        createProgramApplication(SUPER_ADMIN_USER_ID, request)
+        programApplicationService.applyApplication(
+            SUPER_ADMIN_USER_ID,
+            request.programId,
+            request.attachmentFileIds,
+            request.questionAnswers,
+        )
 
         val request2 =
-            CreateProgramApplicationRequest(
+            ApplyApplicationRequest(
                 programId = 2,
             )
-        createProgramApplication(SUPER_ADMIN_USER_ID, request2)
+        programApplicationService.applyApplication(
+            SUPER_ADMIN_USER_ID,
+            request2.programId,
+            request2.attachmentFileIds,
+            request2.questionAnswers,
+        )
     }
 }

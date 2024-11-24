@@ -1,7 +1,7 @@
 package com.project.youthmoa.api.controller.application
 
+import com.project.youthmoa.api.controller.application.request.ApplyApplicationRequest
 import com.project.youthmoa.api.controller.application.request.CancelProgramApplicationRequest
-import com.project.youthmoa.api.controller.application.request.CreateProgramApplicationRequest
 import com.project.youthmoa.api.controller.common.response.ErrorResponse
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -29,7 +29,7 @@ interface ProgramApplicationApiDescription {
             ),
         ],
     )
-    fun createApplication(request: CreateProgramApplicationRequest): Long
+    fun applyApplication(request: ApplyApplicationRequest): Long
 
     @ApiResponses(
         value = [

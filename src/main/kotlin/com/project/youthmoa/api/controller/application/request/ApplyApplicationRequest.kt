@@ -2,7 +2,7 @@ package com.project.youthmoa.api.controller.application.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 
-data class CreateProgramApplicationRequest(
+data class ApplyApplicationRequest(
     val programId: Long,
     val attachmentFileIds: List<Long> = emptyList(),
     val questionAnswers: List<QuestionAnswer> = emptyList(),

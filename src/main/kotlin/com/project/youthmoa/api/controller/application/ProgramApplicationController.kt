@@ -1,8 +1,9 @@
 package com.project.youthmoa.api.controller.application
 
 import com.project.youthmoa.api.configuration.AuthenticationRequired
+import com.project.youthmoa.api.controller.application.request.AdminUpdateApplicationRequest
+import com.project.youthmoa.api.controller.application.request.ApplyApplicationRequest
 import com.project.youthmoa.api.controller.application.request.CancelProgramApplicationRequest
-import com.project.youthmoa.api.controller.application.request.CreateProgramApplicationRequest
 import com.project.youthmoa.api.controller.application.response.GetAppliedProgramApplicationResponse
 import com.project.youthmoa.api.controller.application.response.GetProgramApplicationResponse
 import com.project.youthmoa.api.controller.application.response.GetUserApplicationHistoriesResponse
@@ -13,8 +14,6 @@ import com.project.youthmoa.common.util.file.ExcelManager
 import com.project.youthmoa.common.util.file.ExcelManager.Default.setExcelDownload
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
-import com.project.youthmoa.domain.service.CancelProgramApplication
-import com.project.youthmoa.domain.service.CreateProgramApplication
 import com.project.youthmoa.domain.service.ProgramApplicationService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -29,8 +28,6 @@ import org.springframework.web.bind.annotation.*
 class ProgramApplicationController(
     private val programApplicationService: ProgramApplicationService,
     private val programApplicationRepository: ProgramApplicationRepository,
-    private val createProgramApplication: CreateProgramApplication,
-    private val cancelProgramApplication: CancelProgramApplication,
     private val authManager: AuthManager,
 ) : ProgramApplicationApiDescription {
     // TODO : 응답 통일해야함;;
@@ -45,11 +42,16 @@ class ProgramApplicationController(
     @Operation(summary = "프로그램 참가 신청")
     @AuthenticationRequired
     @PostMapping("/api/applications")
-    override fun createApplication(
-        @Valid @RequestBody request: CreateProgramApplicationRequest,
+    override fun applyApplication(
+        @Valid @RequestBody request: ApplyApplicationRequest,
     ): Long {
         val loginUser = authManager.getCurrentLoginUser()
-        return createProgramApplication(loginUser.id, request)
+        return programApplicationService.applyApplication(
+            userId = loginUser.id,
+            programId = request.programId,
+            attachmentFileIds = request.attachmentFileIds,
+            questionAnswers = request.questionAnswers,
+        )
     }
 
     @Operation(summary = "프로그램 신청 취소")
@@ -60,7 +62,11 @@ class ProgramApplicationController(
         @Valid @RequestBody request: CancelProgramApplicationRequest,
     ) {
         val loginUser = authManager.getCurrentLoginUser()
-        cancelProgramApplication(loginUser.id, applicationId, request)
+        programApplicationService.cancelApplicationByUser(
+            userId = loginUser.id,
+            applicationId = applicationId,
+            cancelReason = request.cancelReason,
+        )
     }
 
     @Operation(summary = "프로그램 신청서 상세 조회")
@@ -70,6 +76,22 @@ class ProgramApplicationController(
     ): GetProgramApplicationResponse {
         val application = programApplicationRepository.findByIdOrThrow(applicationId)
         return GetProgramApplicationResponse.from(application)
+    }
+
+    @Operation(summary = "프로그램 신청서 상태 변경")
+    @AuthenticationRequired
+    @PutMapping("/admin/applications/{applicationId}")
+    fun updateApplicationStatus(
+        @PathVariable applicationId: Long,
+        @Valid @RequestBody request: AdminUpdateApplicationRequest,
+    ) {
+        val loginUser = authManager.getCurrentLoginUser()
+        programApplicationService.updateApplicationByAdmin(
+            applicationId = applicationId,
+            adminUserId = loginUser.id,
+            adminComment = request.adminComment,
+            applicationStatus = request.applicationStatus,
+        )
     }
 
     @Operation(summary = "프로그램 신청서 목록(현황) 조회")
