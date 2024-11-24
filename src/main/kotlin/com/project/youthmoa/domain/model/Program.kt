@@ -4,7 +4,6 @@ import com.project.youthmoa.api.controller.program.request.CreateOrUpdateProgram
 import com.project.youthmoa.domain.model.converter.CommaToStringListConverter
 import com.project.youthmoa.domain.type.ProgramStatus
 import jakarta.persistence.*
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -15,11 +14,10 @@ class Program(
     var detailContent: String? = null,
     var currentAppliedUserCount: Int = 0,
     var maxUserCount: Int,
-    var applyStartDate: LocalDate,
-    var applyEndDate: LocalDate,
-    var programStartDate: LocalDate,
-    var programEndDate: LocalDate,
-    var programStartAt: LocalDateTime? = null,
+    var applyStartAt: LocalDateTime,
+    var applyEndAt: LocalDateTime,
+    var programStartAt: LocalDateTime,
+    var programEndAt: LocalDateTime,
     @Enumerated(EnumType.STRING)
     var status: ProgramStatus,
     @Convert(converter = CommaToStringListConverter::class)
@@ -37,9 +35,6 @@ class Program(
     @OneToMany(mappedBy = "program", cascade = [CascadeType.ALL], orphanRemoval = true)
     var applications: MutableList<ProgramApplication> = arrayListOf(),
 ) : BaseEntity() {
-    val freeQuestionMap: Map<Long, ProgramFreeQuestion>
-        get() = freeQuestions.associateBy { it.id }
-
     fun isEnd() = status == ProgramStatus.마감
 
     fun isInProgress() = status == ProgramStatus.진행중
@@ -55,10 +50,10 @@ class Program(
         location = request.location
         detailContent = request.detailContent
         maxUserCount = request.maxUserCount
-        applyStartDate = request.applyStartDate
-        applyEndDate = request.applyEndDate
-        programStartDate = request.programStartDate
-        programEndDate = request.programEndDate
+        applyStartAt = request.applyStartAt
+        applyEndAt = request.applyEndAt
+        programStartAt = request.programStartAt
+        programEndAt = request.programEndAt
         attachmentFileIds = request.attachmentFileIds
         programImageFileId = request.programImageFileId
         contact = request.contact
@@ -74,7 +69,7 @@ class Program(
             request: CreateOrUpdateProgramRequest,
             youthCenter: YouthCenter,
         ): Program {
-            val status = if (LocalDate.now() < request.applyStartDate) ProgramStatus.진행예정 else ProgramStatus.진행중
+            val status = if (LocalDateTime.now() < request.applyStartAt) ProgramStatus.진행예정 else ProgramStatus.진행중
             val program =
                 Program(
                     title = request.title,
@@ -82,10 +77,10 @@ class Program(
                     location = request.location,
                     detailContent = request.detailContent,
                     maxUserCount = request.maxUserCount,
-                    applyStartDate = request.applyStartDate,
-                    applyEndDate = request.applyEndDate,
-                    programStartDate = request.programStartDate,
-                    programEndDate = request.programEndDate,
+                    applyStartAt = request.applyStartAt,
+                    applyEndAt = request.applyEndAt,
+                    programStartAt = request.programStartAt,
+                    programEndAt = request.programEndAt,
                     attachmentFileIds = request.attachmentFileIds,
                     programImageFileId = request.programImageFileId,
                     contact = request.contact,

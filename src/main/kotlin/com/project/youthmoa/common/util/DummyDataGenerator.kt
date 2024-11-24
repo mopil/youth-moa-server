@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.random.Random
 
 const val SUPER_ADMIN_USER_ID = 1L
@@ -67,10 +68,10 @@ class DummyDataGenerator(
                 location = "장소 ${alphabets.random()} $it",
                 currentAppliedUserCount = Random.nextInt(0, 19),
                 maxUserCount = Random.nextInt(20, 50),
-                applyStartDate = LocalDate.now().minusDays(Random.nextLong(0, 14)),
-                applyEndDate = LocalDate.now().plusDays(Random.nextLong(0, 7)),
-                programStartDate = LocalDate.now().minusDays(Random.nextLong(0, 14)),
-                programEndDate = LocalDate.now().plusDays(Random.nextLong(0, 7)),
+                applyStartAt = LocalDateTime.now().minusDays(Random.nextLong(0, 14)),
+                applyEndAt = LocalDateTime.now().plusDays(Random.nextLong(0, 7)),
+                programStartAt = LocalDateTime.now().minusDays(Random.nextLong(0, 14)),
+                programEndAt = LocalDateTime.now().plusDays(Random.nextLong(0, 7)),
                 lectures = listOf("강좌1", "강좌2"),
                 youthCenter = youthCenters.random(),
                 status = ProgramStatus.진행예정,
@@ -111,5 +112,11 @@ class DummyDataGenerator(
                     ),
             )
         createProgramApplication(SUPER_ADMIN_USER_ID, request)
+
+        val request2 =
+            CreateProgramApplicationRequest(
+                programId = 2,
+            )
+        createProgramApplication(SUPER_ADMIN_USER_ID, request2)
     }
 }

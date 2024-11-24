@@ -1,15 +1,15 @@
 package com.project.youthmoa.api.controller.program.request
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class CreateOrUpdateProgramRequest(
     val programImageFileId: Long?,
     val title: String,
     val description: String?,
-    val applyStartDate: LocalDate,
-    val applyEndDate: LocalDate,
-    val programStartDate: LocalDate,
-    val programEndDate: LocalDate,
+    val applyStartAt: LocalDateTime,
+    val applyEndAt: LocalDateTime,
+    val programStartAt: LocalDateTime,
+    val programEndAt: LocalDateTime,
     val location: String?,
     val maxUserCount: Int,
     val contact: String?,

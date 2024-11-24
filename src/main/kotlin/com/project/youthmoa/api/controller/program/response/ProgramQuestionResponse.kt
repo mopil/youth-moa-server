@@ -7,7 +7,7 @@ data class ProgramQuestionResponse(
     val question: String,
 ) {
     companion object {
-        fun of(question: ProgramFreeQuestion): ProgramQuestionResponse {
+        fun from(question: ProgramFreeQuestion): ProgramQuestionResponse {
             return ProgramQuestionResponse(
                 questionId = question.id,
                 question = question.question,

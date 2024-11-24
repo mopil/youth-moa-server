@@ -79,7 +79,7 @@ class ProgramApplicationController(
         @RequestParam page: Int,
         @RequestParam size: Int,
     ): PageResponse<GetAppliedProgramApplicationResponse> {
-        return programApplicationRepository.findAllByProgramId(programId, PageRequest.of(page, size))
+        return programApplicationRepository.findAllByProgramIdAndAppliedCount(programId, PageRequest.of(page, size))
             .map { GetAppliedProgramApplicationResponse.from(it) }
             .let { PageResponse.from(it) }
     }

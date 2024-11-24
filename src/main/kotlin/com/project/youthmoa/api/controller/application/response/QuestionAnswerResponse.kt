@@ -13,7 +13,7 @@ data class QuestionAnswerResponse(
             answer: String,
         ): QuestionAnswerResponse {
             return QuestionAnswerResponse(
-                question = ProgramQuestionResponse.of(question),
+                question = ProgramQuestionResponse.from(question),
                 answer = answer,
             )
         }

@@ -3,7 +3,6 @@ package com.project.youthmoa.api.controller.program.response
 import com.project.youthmoa.domain.model.Program
 import com.project.youthmoa.domain.type.ProgramStatus
 import io.swagger.v3.oas.annotations.media.Schema
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class ProgramInfoResponse(
@@ -13,10 +12,10 @@ data class ProgramInfoResponse(
     val title: String,
     val description: String?,
     val detailContent: String?,
-    val applyStartDate: LocalDate,
-    val applyEndDate: LocalDate,
-    val programStartDate: LocalDate,
-    val programEndDate: LocalDate,
+    val applyStartAt: LocalDateTime,
+    val applyEndAt: LocalDateTime,
+    val programStartAt: LocalDateTime,
+    val programEndAt: LocalDateTime,
     val location: String?,
     val currentAppliedUserCount: Int,
     val maxUserCount: Int,
@@ -24,7 +23,7 @@ data class ProgramInfoResponse(
     val attachmentFileIds: List<Long> = emptyList(),
     val lectures: List<String>,
     @Schema(description = "주관식 질문들")
-    val freeQuestions: List<String>,
+    val freeQuestions: List<ProgramQuestionResponse>,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
 ) {
@@ -37,17 +36,17 @@ data class ProgramInfoResponse(
                 title = program.title,
                 description = program.description,
                 detailContent = program.detailContent,
-                applyStartDate = program.applyStartDate,
-                applyEndDate = program.applyEndDate,
-                programStartDate = program.programStartDate,
-                programEndDate = program.programEndDate,
+                applyStartAt = program.applyStartAt,
+                applyEndAt = program.applyEndAt,
+                programStartAt = program.programStartAt,
+                programEndAt = program.programEndAt,
                 location = program.location,
                 currentAppliedUserCount = program.currentAppliedUserCount,
                 maxUserCount = program.maxUserCount,
                 contactNumber = program.contact,
                 attachmentFileIds = program.attachmentFileIds,
                 lectures = program.lectures,
-                freeQuestions = program.freeQuestions.map { it.question },
+                freeQuestions = program.freeQuestions.map { ProgramQuestionResponse.from(it) },
                 createdAt = program.createdAt,
                 updatedAt = program.updatedAt,
             )
