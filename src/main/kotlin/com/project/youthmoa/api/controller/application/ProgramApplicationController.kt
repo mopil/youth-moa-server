@@ -36,7 +36,21 @@ class ProgramApplicationController(
     @GetMapping("/api/applications/by-me")
     fun getAllApplicationsByUser(): GetAllApplicationsByUserResponse {
         val loginUser = authManager.getCurrentLoginUser()
-        val applications = programApplicationRepository.findAllByApplierId(loginUser.id)
+        return getApplications(loginUser.id)
+    }
+
+    @Operation(summary = "특정 사용자의 프로그램 신청 이력 조회")
+    @AuthenticationRequired
+    @GetMapping("/admin/applications/by-user-id")
+    fun getAllApplicationsByAdmin(
+        @RequestParam userId: Long,
+    ): GetAllApplicationsByUserResponse {
+        authManager.getCurrentLoginAdmin()
+        return getApplications(userId)
+    }
+
+    private fun getApplications(userId: Long): GetAllApplicationsByUserResponse {
+        val applications = programApplicationRepository.findAllByApplierId(userId)
         val programs = applications.map { it.program }
 
         return GetAllApplicationsByUserResponse(
