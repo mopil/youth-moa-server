@@ -43,6 +43,13 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+
+    - name: Copy application-secret.properties
+      env:
+          PROPERTIES_SECRET: ${{ secrets.APPLICATION_SECRET_PROPERTEIS }}
+          PROPERTIES_DIR: src/main/resources
+          PROPERTIES_FILE_NAME: application-secret.properties
+      run: echo $PROPERTIES_SECRET | base64 --decode > $PROPERTIES_DIR/$PROPERTIES_FILE_NAME
         
     # (3) Gradle build (Test 제외)
     - name: Grant execute permission for gradlew
