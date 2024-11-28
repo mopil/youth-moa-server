@@ -16,5 +16,6 @@ object AuthenticationUtils {
             "/api/programs/{programId}",
             "/admin/{adminUserId}/super-login",
             "/admin/**",
+            "/health",
         )
 }
