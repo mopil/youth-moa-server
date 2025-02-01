@@ -27,8 +27,8 @@ class SwaggerConfig {
             .components(Components())
             .servers(
                 listOf(
-                    Server().url("http://localhost:8080").description("local"),
                     Server().url("https://youth-moa-server.click").description("live"),
+                    Server().url("http://localhost:8080").description("local"),
                 ),
             )
             .info(apiInfo())
