@@ -32,19 +32,42 @@ class DummyDataGenerator(
     @PostConstruct
     @Transactional
     fun init() {
-        userRepository.save(
-            User(
-                email = "mopil1102@gmail.com",
-                phone = "01012345678",
-                encPassword = passwordEncoder.encode("1234"),
-                name = "홍길동",
-                address = "서울시 강남구",
-                birthday = LocalDate.of(1998, 11, 2),
-                role = UserRole.ADMIN,
-                gender = Gender.남,
-            ),
-        )
+        if (userRepository.count() < 1) {
+            generateDummyUsers()
+        }
 
+        if (programRepository.count() < 1) {
+            generateDummyPrograms()
+        }
+    }
+
+    private fun generateDummyUsers() {
+        val emails = listOf(
+            "mopil1102@gmail.com",
+            "hello2025@naver.com",
+            "youthmoa2025@gmail.com",
+            "tester1102@naver.com"
+        )
+        val phones = listOf("01012345678", "01023456789", "01034567890", "01045678901")
+        val names = listOf("홍길동", "김철수", "배성흥", "박영수", "이민호", "김민정", "이지은", "박지현", "전예진", "김시현")
+        val addresses = listOf("서울시 강남구", "서울시 마포구", "서울시 서대문구", "서울시 종로구")
+        repeat(100) {
+            User(
+                email = emails.random(),
+                phone = phones.random(),
+                encPassword = passwordEncoder.encode("1234"),
+                name = names.random(),
+                address = addresses.random(),
+                birthday = LocalDate.from(LocalDateTime.now().minusYears(Random.nextLong(20, 30))),
+                role = UserRole.entries.toTypedArray().random(),
+                gender = Gender.entries.toTypedArray().random()
+            ).also {
+                userRepository.save(it)
+            }
+        }
+    }
+
+    private fun generateDummyPrograms() {
         val alphabets = listOf("A", "B", "C", "D", "E")
         val regions = listOf("서울", "경기", "자양동", "마포구")
 
@@ -101,16 +124,16 @@ class DummyDataGenerator(
             ApplyApplicationRequest(
                 programId = 1,
                 questionAnswers =
-                    listOf(
-                        QuestionAnswer(
-                            questionId = 1,
-                            content = "답변1",
-                        ),
-                        QuestionAnswer(
-                            questionId = 2,
-                            content = "답변2",
-                        ),
+                listOf(
+                    QuestionAnswer(
+                        questionId = 1,
+                        content = "답변1",
                     ),
+                    QuestionAnswer(
+                        questionId = 2,
+                        content = "답변2",
+                    ),
+                ),
             )
         programApplicationWriteService.applyApplication(
             SUPER_ADMIN_USER_ID,

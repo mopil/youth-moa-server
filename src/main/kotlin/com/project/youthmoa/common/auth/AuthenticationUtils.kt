@@ -15,7 +15,7 @@ object AuthenticationUtils {
             "/api/programs",
             "/api/programs/{programId}",
             "/admin/{adminUserId}/super-login",
-            "/admin/**",
+            "/admin/**", // TODO: 어드민 개발 완료 후 제거
             "/health",
         )
 }

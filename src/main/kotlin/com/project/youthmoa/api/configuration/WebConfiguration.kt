@@ -11,6 +11,7 @@ class WebConfiguration : WebMvcConfigurer {
             .allowedOrigins(
                 "http://localhost:3000",
                 "http://localhost:8080",
+                "https://youth-moa-server.click"
             )
             .allowedMethods("*")
             .allowCredentials(true)
