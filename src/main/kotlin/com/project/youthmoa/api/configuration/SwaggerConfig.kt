@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.servers.Server
 import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,6 +25,12 @@ class SwaggerConfig {
     fun openAPI(): OpenAPI {
         return OpenAPI()
             .components(Components())
+            .servers(
+                listOf(
+                    Server().url("http://localhost:8080").description("local"),
+                    Server().url("https://youth-moa-server.click").description("live"),
+                ),
+            )
             .info(apiInfo())
     }
 
