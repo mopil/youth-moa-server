@@ -34,7 +34,7 @@ class DummyDataGenerator(
     fun init() {
 //        generateDummyUsers()
 //        generateDummyPrograms()
-
+//
         if (userRepository.count() < 1) {
             generateDummyUsers()
         }
@@ -54,10 +54,10 @@ class DummyDataGenerator(
                 "eodrmfl1004@gmail.com",
             )
         val phones = listOf("01012345678", "01023456789", "01034567890", "01045678901")
-        val names = listOf("홍길동", "김철수", "배성흥", "박영수", "이민호", "김민정", "이지은", "박지현", "전예진", "김시현")
+        val names = listOf("홍길동", "김철수", "배성흥", "박영수", "이민호", "김민정", "이지은", "박지현", "전예진", "박시현")
         val addresses = listOf("서울시 강남구", "서울시 마포구", "서울시 서대문구", "서울시 종로구")
         User(
-            email = "eodrmfl1004@gmail.com",
+            email = "eodrmfdl1004@gmail.com",
             phone = phones.random(),
             encPassword = passwordEncoder.encode("1234"),
             name = "전예진",
@@ -84,9 +84,9 @@ class DummyDataGenerator(
             email = "park985321@gmail.com",
             phone = phones.random(),
             encPassword = passwordEncoder.encode("1234"),
-            name = "김시현",
+            name = "박시현",
             address = addresses.random(),
-            birthday = LocalDate.of(1998, 1, 1),
+            birthday = LocalDate.of(1998, 3, 21),
             role = UserRole.ADMIN,
             gender = Gender.여,
         ).also {
