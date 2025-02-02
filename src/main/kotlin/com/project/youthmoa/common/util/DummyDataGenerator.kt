@@ -32,6 +32,9 @@ class DummyDataGenerator(
     @PostConstruct
     @Transactional
     fun init() {
+//        generateDummyUsers()
+//        generateDummyPrograms()
+
         if (userRepository.count() < 1) {
             generateDummyUsers()
         }
@@ -48,13 +51,50 @@ class DummyDataGenerator(
                 "hello2025@naver.com",
                 "youthmoa2025@gmail.com",
                 "tester1102@naver.com",
+                "eodrmfl1004@gmail.com",
             )
         val phones = listOf("01012345678", "01023456789", "01034567890", "01045678901")
         val names = listOf("홍길동", "김철수", "배성흥", "박영수", "이민호", "김민정", "이지은", "박지현", "전예진", "김시현")
         val addresses = listOf("서울시 강남구", "서울시 마포구", "서울시 서대문구", "서울시 종로구")
+        User(
+            email = "eodrmfl1004@gmail.com",
+            phone = phones.random(),
+            encPassword = passwordEncoder.encode("1234"),
+            name = "전예진",
+            address = addresses.random(),
+            birthday = LocalDate.of(1998, 12, 12),
+            role = UserRole.ADMIN,
+            gender = Gender.여,
+        ).also {
+            userRepository.save(it)
+        }
+        User(
+            email = "mopil1102@gmail.com",
+            phone = phones.random(),
+            encPassword = passwordEncoder.encode("1234"),
+            name = "배성흥",
+            address = addresses.random(),
+            birthday = LocalDate.of(1998, 11, 2),
+            role = UserRole.ADMIN,
+            gender = Gender.남,
+        ).also {
+            userRepository.save(it)
+        }
+        User(
+            email = "park985321@gmail.com",
+            phone = phones.random(),
+            encPassword = passwordEncoder.encode("1234"),
+            name = "김시현",
+            address = addresses.random(),
+            birthday = LocalDate.of(1998, 1, 1),
+            role = UserRole.ADMIN,
+            gender = Gender.여,
+        ).also {
+            userRepository.save(it)
+        }
         repeat(100) {
             User(
-                email = emails.random(),
+                email = emails.random() + "$it",
                 phone = phones.random(),
                 encPassword = passwordEncoder.encode("1234"),
                 name = names.random(),
