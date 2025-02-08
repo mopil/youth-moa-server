@@ -45,7 +45,6 @@ class ProgramApplicationController(
     fun getAllApplicationsByAdmin(
         @RequestParam userId: Long,
     ): GetAllApplicationsByUserResponse {
-        authManager.getCurrentLoginAdmin()
         return getApplications(userId)
     }
 
@@ -55,7 +54,7 @@ class ProgramApplicationController(
 
         return GetAllApplicationsByUserResponse(
             ProgramCountResponse.from(programs),
-            applications = applications.map { GetProgramApplicationResponse.from(it) },
+            applications = applications.map { GetProgramApplicationResponse.from(it) }.sortedBy { it.appliedAt },
         )
     }
 
