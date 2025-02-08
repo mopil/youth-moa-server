@@ -11,13 +11,24 @@ import org.springframework.stereotype.Repository
 interface UserRepository : JpaRepository<User, Long>, UserJdslRepository {
     fun findByEmail(email: String): User?
 
+    fun findAllByEmail(email: String): List<User>
+
     fun findAllByNameAndPhone(
         name: String,
         phone: String,
     ): List<User>
 }
 
-fun UserRepository.findByEmailOrThrow(email: String): User = findByEmail(email) ?: throw NoSuchElementException()
+fun UserRepository.findUniqueByEmailOrThrow(email: String): User {
+    val users = findAllByEmail(email)
+    if (users.size > 1) {
+        throw IllegalStateException("$email 을 가진 사용자가 ${users.size}명 있습니다.")
+    }
+    if (users.isEmpty()) {
+        throw NoSuchElementException()
+    }
+    return users.firstOrNull() ?: throw NoSuchElementException()
+}
 
 fun UserRepository.findByIdOrThrow(id: Long): User = findById(id).orElseThrow()
 

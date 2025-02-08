@@ -8,7 +8,7 @@ import com.project.youthmoa.common.exception.ErrorType
 import com.project.youthmoa.common.exception.UnauthorizedException
 import com.project.youthmoa.common.util.TokenManager
 import com.project.youthmoa.domain.repository.UserRepository
-import com.project.youthmoa.domain.repository.findByEmailOrThrow
+import com.project.youthmoa.domain.repository.findUniqueByEmailOrThrow
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -41,7 +41,7 @@ class UserLoginServiceImpl(
     }
 
     override fun login(request: UserLoginRequest): UserLoginResponse {
-        val user = userRepository.findByEmailOrThrow(request.email)
+        val user = userRepository.findUniqueByEmailOrThrow(request.email)
 
         if (passwordEncoder.matches(request.password, user.encPassword).not()) {
             throw UnauthorizedException(ErrorType.INVALID_PASSWORD.defaultMessage)

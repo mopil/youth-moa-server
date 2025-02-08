@@ -4,8 +4,8 @@ import com.project.youthmoa.api.controller.user.request.UpdateUserInfoRequest
 import com.project.youthmoa.api.controller.user.response.UserInfoResponse
 import com.project.youthmoa.common.util.SendEmail
 import com.project.youthmoa.domain.repository.UserRepository
-import com.project.youthmoa.domain.repository.findByEmailOrThrow
 import com.project.youthmoa.domain.repository.findByIdOrThrow
+import com.project.youthmoa.domain.repository.findUniqueByEmailOrThrow
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -47,7 +47,7 @@ class UserWriteServiceImpl(
 
     @Transactional
     override fun resetPassword(email: String) {
-        val user = userRepository.findByEmailOrThrow(email)
+        val user = userRepository.findUniqueByEmailOrThrow(email)
 
         val randomPassword = (100000..999999).random().toString()
         user.encPassword = passwordEncoder.encode(randomPassword)
