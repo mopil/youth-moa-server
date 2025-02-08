@@ -1,7 +1,6 @@
 package com.project.youthmoa.common.util
 
 import com.project.youthmoa.api.controller.application.request.ApplyApplicationRequest
-import com.project.youthmoa.api.controller.application.request.QuestionAnswer
 import com.project.youthmoa.domain.model.*
 import com.project.youthmoa.domain.repository.ProgramRepository
 import com.project.youthmoa.domain.repository.UserRepository
@@ -34,7 +33,6 @@ class DummyDataGenerator(
     fun init() {
 //        generateDummyUsers()
 //        generateDummyPrograms()
-//
         if (userRepository.count() < 1) {
             generateDummyUsers()
         }
@@ -145,53 +143,42 @@ class DummyDataGenerator(
             }
         }
 
-        programRepository.findByIdOrThrow(1).apply {
-            freeQuestions =
-                mutableListOf(
-                    ProgramFreeQuestion(
-                        question = "질문1",
-                        program = this,
-                    ),
-                    ProgramFreeQuestion(
-                        question = "질문2",
-                        program = this,
-                    ),
-                )
-        }.also {
-            programRepository.save(it)
+        try {
+            programRepository.findByIdOrThrow(1).apply {
+                freeQuestions =
+                    mutableListOf(
+                        ProgramFreeQuestion(
+                            question = "질문1",
+                            program = this,
+                        ),
+                        ProgramFreeQuestion(
+                            question = "질문2",
+                            program = this,
+                        ),
+                    )
+            }.also {
+                programRepository.save(it)
+            }
+        } catch (e: Exception) {
+            println(e.message)
         }
 
-        val request =
-            ApplyApplicationRequest(
-                programId = 1,
-                questionAnswers =
-                    listOf(
-                        QuestionAnswer(
-                            questionId = 1,
-                            content = "답변1",
-                        ),
-                        QuestionAnswer(
-                            questionId = 2,
-                            content = "답변2",
-                        ),
-                    ),
-            )
-        programApplicationWriteService.applyApplication(
-            SUPER_ADMIN_USER_ID,
-            request.programId,
-            request.attachmentFileIds,
-            request.questionAnswers,
-        )
-
-        val request2 =
-            ApplyApplicationRequest(
-                programId = 2,
-            )
-        programApplicationWriteService.applyApplication(
-            SUPER_ADMIN_USER_ID,
-            request2.programId,
-            request2.attachmentFileIds,
-            request2.questionAnswers,
-        )
+        repeat(30) {
+            try {
+                val request =
+                    ApplyApplicationRequest(
+                        programId = it.toLong(),
+                        questionAnswers = emptyList(),
+                    )
+                programApplicationWriteService.applyApplication(
+                    SUPER_ADMIN_USER_ID,
+                    request.programId,
+                    request.attachmentFileIds,
+                    request.questionAnswers,
+                )
+            } catch (e: Exception) {
+                println("$it skipped ${e.message}")
+            }
+        }
     }
 }
