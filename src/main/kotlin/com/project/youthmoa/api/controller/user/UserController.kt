@@ -83,6 +83,16 @@ class UserController(
         userWriteService.resetPassword(request.email)
     }
 
+    @Operation(summary = "사용자 정보 조회")
+    @AuthenticationRequired
+    @GetMapping("/admin/users/{userId}")
+    fun getUserInfo(
+        @PathVariable userId: Long,
+    ): UserInfoResponse {
+        return userRepository.findById(userId).map { UserInfoResponse.from(it) }
+            .orElseThrow { IllegalArgumentException("사용자를 찾을 수 없습니다.") }
+    }
+
     @Operation(summary = "사용자 정보 수정")
     @AuthenticationRequired
     @PutMapping(
