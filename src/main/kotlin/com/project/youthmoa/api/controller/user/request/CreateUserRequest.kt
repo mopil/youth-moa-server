@@ -22,6 +22,7 @@ data class CreateUserRequest(
     @field:Pattern(regexp = ".*[0-9].*", message = "휴대폰 번호는 숫자만 입력해야 합니다.")
     val phone: String,
     val address: String,
+    val addressDetail: String,
     val gender: Gender,
     @Schema(description = "생년월일(yyyy-MM-dd)", example = "1998-11-02")
     val birthday: LocalDate,
@@ -33,6 +34,7 @@ data class CreateUserRequest(
             name = name,
             phone = phone,
             address = address,
+            addressDetail = addressDetail,
             gender = gender,
             birthday = birthday,
         )

@@ -103,7 +103,6 @@ class UserController(
         @PathVariable userId: Long,
         @Valid @RequestBody request: UpdateUserInfoRequest,
     ): UserInfoResponse {
-        authManager.checkIsSelf(userId)
         return userWriteService.updateUserInfo(userId, request)
     }
 

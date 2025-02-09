@@ -54,12 +54,14 @@ class DummyDataGenerator(
         val phones = listOf("01012345678", "01023456789", "01034567890", "01045678901")
         val names = listOf("홍길동", "김철수", "배성흥", "박영수", "이민호", "김민정", "이지은", "박지현", "전예진", "박시현")
         val addresses = listOf("서울시 강남구", "서울시 마포구", "서울시 서대문구", "서울시 종로구")
+        val addressDetails = listOf("1002호", "302동 999호", "101동 101호", "101동 102호")
         User(
             email = "eodrmfdl1004@gmail.com",
             phone = phones.random(),
             encPassword = passwordEncoder.encode("1234"),
             name = "전예진",
             address = addresses.random(),
+            addressDetail = addressDetails.random(),
             birthday = LocalDate.of(1998, 12, 12),
             role = UserRole.ADMIN,
             gender = Gender.여,
@@ -72,6 +74,7 @@ class DummyDataGenerator(
             encPassword = passwordEncoder.encode("1234"),
             name = "배성흥",
             address = addresses.random(),
+            addressDetail = addressDetails.random(),
             birthday = LocalDate.of(1998, 11, 2),
             role = UserRole.ADMIN,
             gender = Gender.남,
@@ -84,6 +87,7 @@ class DummyDataGenerator(
             encPassword = passwordEncoder.encode("1234"),
             name = "박시현",
             address = addresses.random(),
+            addressDetail = addressDetails.random(),
             birthday = LocalDate.of(1998, 3, 21),
             role = UserRole.ADMIN,
             gender = Gender.여,
@@ -97,6 +101,7 @@ class DummyDataGenerator(
                 encPassword = passwordEncoder.encode("1234"),
                 name = names.random(),
                 address = addresses.random(),
+                addressDetail = addressDetails.random(),
                 birthday = LocalDate.from(LocalDateTime.now().minusYears(Random.nextLong(20, 30))),
                 role = UserRole.entries.toTypedArray().random(),
                 gender = Gender.entries.toTypedArray().random(),

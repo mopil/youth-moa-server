@@ -30,7 +30,7 @@ data class UserListExcelRow(
                 phone = user.phone,
                 name = user.name,
                 gender = user.gender.name,
-                address = user.address,
+                address = "${user.address} ${user.addressDetail}",
                 birthday = user.birthday.toString(),
                 lastLoginedAt = user.lastLoginedAt.toString(),
                 createdAt = user.createdAt.toString(),

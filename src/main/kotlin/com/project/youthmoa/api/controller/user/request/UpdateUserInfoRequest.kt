@@ -14,6 +14,7 @@ data class UpdateUserInfoRequest(
     @field:Pattern(regexp = ".*[0-9].*", message = "휴대폰 번호는 숫자만 입력해야 합니다.")
     val newPhone: String,
     val newAddress: String,
+    val newAddressDetail: String,
     val newGender: Gender,
     val newBirthday: LocalDate,
 )

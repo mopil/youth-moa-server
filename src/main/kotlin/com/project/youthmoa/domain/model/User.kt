@@ -15,6 +15,7 @@ class User(
     var encPassword: String,
     var name: String,
     var address: String,
+    var addressDetail: String,
     var birthday: LocalDate,
     @Enumerated(EnumType.STRING)
     val role: UserRole = UserRole.USER,

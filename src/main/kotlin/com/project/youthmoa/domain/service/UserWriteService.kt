@@ -40,6 +40,7 @@ class UserWriteServiceImpl(
             encPassword = passwordEncoder.encode(request.newPassword)
             gender = request.newGender
             address = request.newAddress
+            addressDetail = request.newAddressDetail
             phone = request.newPhone
         }
         return UserInfoResponse.from(user)
