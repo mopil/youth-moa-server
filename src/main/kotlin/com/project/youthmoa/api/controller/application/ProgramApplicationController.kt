@@ -16,6 +16,7 @@ import com.project.youthmoa.common.util.file.ExcelManager.Default.setExcelDownlo
 import com.project.youthmoa.domain.repository.ProgramApplicationRepository
 import com.project.youthmoa.domain.repository.findByIdOrThrow
 import com.project.youthmoa.domain.service.ProgramApplicationWriteService
+import com.project.youthmoa.domain.type.ProgramApplicationStatus
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
@@ -44,12 +45,19 @@ class ProgramApplicationController(
     @GetMapping("/admin/applications/by-user-id")
     fun getAllApplicationsByAdmin(
         @RequestParam userId: Long,
+        @RequestParam(required = false) applicationStatus: ProgramApplicationStatus? = null,
     ): GetAllApplicationsByUserResponse {
-        return getApplications(userId)
+        return getApplications(userId, applicationStatus)
     }
 
-    private fun getApplications(userId: Long): GetAllApplicationsByUserResponse {
-        val applications = programApplicationRepository.findAllByApplierId(userId)
+    private fun getApplications(
+        userId: Long,
+        status: ProgramApplicationStatus? = null,
+    ): GetAllApplicationsByUserResponse {
+        val applications =
+            programApplicationRepository.findAllByApplierId(userId).filter {
+                status == null || it.status == status
+            }
         val programs = applications.map { it.program }
 
         return GetAllApplicationsByUserResponse(

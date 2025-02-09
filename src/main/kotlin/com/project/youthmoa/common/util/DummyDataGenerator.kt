@@ -2,12 +2,10 @@ package com.project.youthmoa.common.util
 
 import com.project.youthmoa.api.controller.application.request.ApplyApplicationRequest
 import com.project.youthmoa.domain.model.*
-import com.project.youthmoa.domain.repository.ProgramRepository
-import com.project.youthmoa.domain.repository.UserRepository
-import com.project.youthmoa.domain.repository.YouthCenterRepository
-import com.project.youthmoa.domain.repository.findByIdOrThrow
+import com.project.youthmoa.domain.repository.*
 import com.project.youthmoa.domain.service.ProgramApplicationWriteService
 import com.project.youthmoa.domain.type.Gender
+import com.project.youthmoa.domain.type.ProgramApplicationStatus
 import com.project.youthmoa.domain.type.ProgramStatus
 import com.project.youthmoa.domain.type.UserRole
 import jakarta.annotation.PostConstruct
@@ -27,6 +25,7 @@ class DummyDataGenerator(
     private val youthCenterRepository: YouthCenterRepository,
     private val passwordEncoder: PasswordEncoder,
     private val programApplicationWriteService: ProgramApplicationWriteService,
+    private val programApplicationRepository: ProgramApplicationRepository,
 ) {
     @PostConstruct
     @Transactional
@@ -184,6 +183,12 @@ class DummyDataGenerator(
             } catch (e: Exception) {
                 println("$it skipped ${e.message}")
             }
+        }
+
+        programApplicationRepository.flush()
+
+        programApplicationRepository.findAll().forEach {
+            it.status = ProgramApplicationStatus.entries.toTypedArray().random()
         }
     }
 }
