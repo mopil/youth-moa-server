@@ -44,7 +44,7 @@ class GlobalControllerAdvice(
                 .body(
                     FieldErrorResponse(
                         errorType = ErrorType.BAD_REQUEST,
-                        message = "유효하지 않은 값입니다.",
+                        message = validationErrors.firstOrNull()?.reason ?: "유효하지 않는 값이에요",
                         fieldErrors = validationErrors,
                     ),
                 )
