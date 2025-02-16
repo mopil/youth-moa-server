@@ -7,6 +7,7 @@ import com.project.youthmoa.domain.type.ProgramApplicationStatus
 import java.time.LocalDateTime
 
 data class GetProgramApplicationResponse(
+    val applicationId: Long,
     val programInfo: ProgramInfoResponse,
     val applierInfo: UserInfoResponse,
     val answers: List<QuestionAnswerResponse>,
@@ -25,6 +26,7 @@ data class GetProgramApplicationResponse(
             val canceledAt = if (application.isCanceled()) application.cancelDateTime else null
             val approvedAt = if (application.isApproved()) application.adminActionDateTime else null
             return GetProgramApplicationResponse(
+                applicationId = application.id,
                 programInfo = ProgramInfoResponse.from(application.program),
                 applierInfo = UserInfoResponse.from(application.applier),
                 answers = application.answers.map { QuestionAnswerResponse.of(it.question, it.answer) },
