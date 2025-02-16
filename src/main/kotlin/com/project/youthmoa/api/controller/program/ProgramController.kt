@@ -44,13 +44,14 @@ class ProgramController(
         return PageResponse.of(page, content)
     }
 
-    @Operation(summary = "현재 로그인한 관리자가 등록한 프로그램 목록 조회")
+    @Operation(summary = "특정 사용자가 등록한 프로그램 목록 조회")
     @GetMapping(
-        "/admin/programs/by-me",
+        "/admin/programs/by-user-id",
     )
-    fun getAllProgramsRegisterByAdmin(): GetAllProgramsByAdminResponse {
-        val loginAdmin = authManager.getCurrentLoginAdmin()
-        val programs = programRepository.findAllByAdminUserId(loginAdmin.id)
+    fun getAllProgramsByUserId(
+        @RequestParam userId: Long,
+    ): GetAllProgramsByAdminResponse {
+        val programs = programRepository.findAllByAdminUserId(userId)
         return GetAllProgramsByAdminResponse(
             countInfo = ProgramCountResponse.from(programs),
             programs = programs.map { ProgramInfoResponse.from(it) },
