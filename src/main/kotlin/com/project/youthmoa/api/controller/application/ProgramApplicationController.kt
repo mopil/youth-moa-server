@@ -97,7 +97,7 @@ class ProgramApplicationController(
     }
 
     @Operation(summary = "프로그램 신청서 상세 조회")
-    @GetMapping("/api/applications/{applicationId}")
+    @GetMapping("/api/applications/{applicationId}", "/admin/applications/{applicationId}")
     fun getApplication(
         @PathVariable applicationId: Long,
     ): GetProgramApplicationResponse {
